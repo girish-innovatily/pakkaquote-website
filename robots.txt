@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Sitemap: https://pakkaquote.com/sitemap.xml
+
+# Block docs directory
+Disallow: /docs/
