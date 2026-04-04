@@ -100,9 +100,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
       var payload = {
         fields: [
-          { name: 'company',  value: company },
-          { name: 'phone',    value: phone },
-          { name: 'message',  value: 'PakkaQuote waitlist signup' }
+          { objectTypeId: '0-2', name: 'name',  value: company },
+          { objectTypeId: '0-1', name: 'phone',    value: phone },
+          { objectTypeId: '0-1', name: 'message',  value: 'PakkaQuote waitlist signup' }
         ],
         context: {
           pageUri:  window.location.href,
