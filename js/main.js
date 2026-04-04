@@ -72,13 +72,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
   var companyInput = document.getElementById('cta-company');
   var phoneInput   = document.getElementById('cta-phone');
+  var submitBtn    = document.querySelector('.cta-btn');
   var ctaForm      = companyInput && phoneInput
-    ? companyInput.closest('form') || phoneInput.closest('form')
+    ? companyInput.closest('.cta-form') || companyInput.closest('form')
     : null;
 
   // Only wire up if the waitlist form elements exist on this page
-  if (ctaForm && companyInput && phoneInput) {
-    ctaForm.addEventListener('submit', function (e) {
+  if (submitBtn && companyInput && phoneInput) {
+    submitBtn.addEventListener('click', function (e) {
       e.preventDefault();
 
       var company = companyInput.value.trim();
@@ -91,8 +92,7 @@ document.addEventListener('DOMContentLoaded', function () {
       }
 
       // Disable the submit button while request is in flight
-      var submitBtn = ctaForm.querySelector('button[type="submit"], input[type="submit"]');
-      if (submitBtn) submitBtn.disabled = true;
+      submitBtn.disabled = true;
 
       var endpoint =
         'https://api-na2.hsforms.com/submissions/v3/integration/submit/' +
@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', function () {
           showFormError('Something went wrong. Please try again.');
         })
         .finally(function () {
-          if (submitBtn) submitBtn.disabled = false;
+          submitBtn.disabled = false;
         });
     });
   }
