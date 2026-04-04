@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pakka Quote — Product Requirements Document</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #1a1a18;
+    --ink-2: #3f3f3b;
+    --ink-3: #6b6b65;
+    --ink-4: #9a9a92;
+    --surface: #fafaf7;
+    --surface-2: #f2f2ec;
+    --surface-3: #e8e8e0;
+    --border: rgba(26,26,24,0.1);
+    --border-strong: rgba(26,26,24,0.2);
+    --teal: #0f6e56;
+    --teal-light: #e1f5ee;
+    --teal-mid: #1d9e75;
+    --amber: #854f0b;
+    --amber-light: #faeeda;
+    --amber-mid: #ba7517;
+    --coral: #993c1d;
+    --coral-light: #faece7;
+    --coral-mid: #d85a30;
+    --purple: #3c3489;
+    --purple-light: #eeedfe;
+    --purple-mid: #7f77dd;
+    --blue: #0c447c;
+    --blue-light: #e6f1fb;
+    --font-display: 'DM Serif Display', Georgia, serif;
+    --font-body: 'Instrument Sans', system-ui, sans-serif;
+    --font-mono: 'DM Mono', monospace;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--surface);
+    color: var(--ink);
+    line-height: 1.6;
+    font-size: 15px;
+  }
+
+  /* Layout */
+  .layout { display: grid; grid-template-columns: 220px 1fr; min-height: 100vh; }
+
+  /* Sidebar */
+  .sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    border-right: 1px solid var(--border);
+    padding: 2rem 1.25rem;
+    background: var(--surface);
+  }
+
+  .sidebar-logo {
+    font-family: var(--font-display);
+    font-size: 18px;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+
+  .sidebar-sub {
+    font-size: 11px;
+    color: var(--ink-4);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 2rem;
+    font-weight: 500;
+  }
+
+  .nav-section {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-4);
+    margin: 1.5rem 0 0.5rem;
+  }
+
+  .nav-item {
+    display: block;
+    font-size: 13px;
+    color: var(--ink-3);
+    text-decoration: none;
+    padding: 5px 8px;
+    border-radius: 6px;
+    margin-bottom: 1px;
+    transition: background 0.15s, color 0.15s;
+  }
+
+  .nav-item:hover, .nav-item.active {
+    background: var(--surface-2);
+    color: var(--ink);
+  }
+
+  .nav-item.active {
+    font-weight: 500;
+    color: var(--teal);
+  }
+
+  /* Main content */
+  .main { padding: 3rem 3.5rem; max-width: 860px; }
+
+  /* Cover */
+  .cover {
+    padding: 3rem 0 4rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 4rem;
+  }
+
+  .cover-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--teal);
+    background: var(--teal-light);
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 1.5rem;
+  }
+
+  .cover h1 {
+    font-family: var(--font-display);
+    font-size: 52px;
+    line-height: 1.05;
+    color: var(--ink);
+    margin-bottom: 1rem;
+    letter-spacing: -0.5px;
+  }
+
+  .cover-desc {
+    font-size: 17px;
+    color: var(--ink-3);
+    max-width: 560px;
+    line-height: 1.65;
+    margin-bottom: 2rem;
+  }
+
+  .cover-meta {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .meta-item { }
+  .meta-label { font-size: 11px; color: var(--ink-4); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 2px; font-weight: 600; }
+  .meta-value { font-size: 14px; color: var(--ink-2); font-weight: 500; }
+
+  /* Sections */
+  .section {
+    margin-bottom: 4rem;
+    scroll-margin-top: 2rem;
+  }
+
+  .section-label {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ink-4);
+    margin-bottom: 0.5rem;
+  }
+
+  h2 {
+    font-family: var(--font-display);
+    font-size: 28px;
+    color: var(--ink);
+    margin-bottom: 1.25rem;
+    line-height: 1.2;
+  }
+
+  h3 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 0.75rem;
+    margin-top: 1.5rem;
+  }
+
+  p { color: var(--ink-3); margin-bottom: 1rem; line-height: 1.7; }
+
+  hr { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
+
+  /* Cards */
+  .card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .card-grid { display: grid; gap: 1rem; margin-bottom: 1rem; }
+  .card-grid-2 { grid-template-columns: 1fr 1fr; }
+  .card-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+  /* Problem items */
+  .problem-item {
+    display: flex;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: flex-start;
+  }
+  .problem-item:last-child { border-bottom: none; }
+  .problem-num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--coral);
+    background: var(--coral-light);
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .problem-text { font-size: 14px; color: var(--ink-2); line-height: 1.6; }
+
+  /* Flow */
+  .flow {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    overflow-x: auto;
+    padding: 1.5rem 0;
+  }
+  .flow-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 90px;
+  }
+  .flow-node {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ink-2);
+    text-align: center;
+    white-space: nowrap;
+  }
+  .flow-node.highlight {
+    background: var(--teal-light);
+    border-color: var(--teal-mid);
+    color: var(--teal);
+  }
+  .flow-arrow {
+    display: flex;
+    align-items: center;
+    padding: 0 4px;
+    color: var(--ink-4);
+    font-size: 14px;
+    padding-top: 8px;
+  }
+
+  /* Scope list */
+  .scope-item {
+    display: flex;
+    gap: 10px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+    color: var(--ink-2);
+    align-items: flex-start;
+  }
+  .scope-item:last-child { border-bottom: none; }
+  .scope-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-top: 7px;
+    flex-shrink: 0;
+  }
+  .dot-teal { background: var(--teal-mid); }
+  .dot-amber { background: var(--amber-mid); }
+
+  /* Conversation mockup */
+  .chat-mockup {
+    background: var(--surface-2);
+    border-radius: 12px;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .chat-title {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-4);
+    margin-bottom: 1rem;
+  }
+
+  .msg { margin-bottom: 10px; display: flex; flex-direction: column; }
+  .msg.them { align-items: flex-start; }
+  .msg.us { align-items: flex-end; }
+
+  .msg-sender {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 3px;
+  }
+  .msg.them .msg-sender { color: var(--teal); }
+  .msg.us .msg-sender { color: var(--purple); }
+
+  .msg-bubble {
+    max-width: 78%;
+    padding: 9px 13px;
+    border-radius: 12px;
+    font-size: 13px;
+    line-height: 1.55;
+    font-family: var(--font-mono);
+    font-weight: 400;
+    white-space: pre-wrap;
+  }
+  .msg.them .msg-bubble {
+    background: white;
+    border: 1px solid var(--border);
+    color: var(--ink-2);
+    border-bottom-left-radius: 3px;
+  }
+  .msg.us .msg-bubble {
+    background: var(--purple-light);
+    border: 1px solid rgba(127,119,221,0.2);
+    color: var(--purple);
+    border-bottom-right-radius: 3px;
+  }
+
+  /* Tech stack */
+  .tech-tag {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 20px;
+    margin: 3px;
+    font-family: var(--font-mono);
+  }
+  .tech-teal { background: var(--teal-light); color: var(--teal); }
+  .tech-purple { background: var(--purple-light); color: var(--purple); }
+  .tech-blue { background: var(--blue-light); color: var(--blue); }
+  .tech-amber { background: var(--amber-light); color: var(--amber); }
+  .tech-coral { background: var(--coral-light); color: var(--coral); }
+
+  /* Timeline */
+  .timeline { position: relative; padding-left: 1.5rem; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 6px;
+    bottom: 6px;
+    width: 1px;
+    background: var(--border-strong);
+  }
+  .tl-item {
+    position: relative;
+    padding: 0 0 2rem 1.5rem;
+  }
+  .tl-item:last-child { padding-bottom: 0; }
+  .tl-dot {
+    position: absolute;
+    left: -5px;
+    top: 5px;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    border: 2px solid var(--surface);
+  }
+  .tl-range {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-4);
+    margin-bottom: 6px;
+    font-family: var(--font-mono);
+  }
+  .tl-tasks { display: flex; flex-direction: column; gap: 6px; }
+  .tl-task {
+    font-size: 13px;
+    color: var(--ink-2);
+    padding: 7px 12px;
+    background: white;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    border-left-width: 2px;
+  }
+
+  /* Risk table */
+  .risk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 1rem; }
+  .risk-cell {
+    padding: 12px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    line-height: 1.55;
+  }
+  .risk-label {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 5px;
+  }
+  .risk-prob { background: var(--coral-light); color: var(--coral); }
+  .risk-prob .risk-label { color: var(--coral-mid); }
+  .risk-mit { background: var(--teal-light); color: var(--teal); }
+  .risk-mit .risk-label { color: var(--teal-mid); }
+
+  /* Pricing */
+  .price-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1rem; }
+  .price-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem;
+    position: relative;
+  }
+  .price-card.featured {
+    border-color: var(--teal-mid);
+    border-width: 1.5px;
+  }
+  .price-badge {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    background: var(--teal-mid);
+    color: white;
+    padding: 3px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+  .price-name { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-4); margin-bottom: 6px; }
+  .price-amount { font-family: var(--font-display); font-size: 28px; color: var(--ink); margin-bottom: 4px; }
+  .price-period { font-size: 12px; color: var(--ink-4); margin-bottom: 12px; }
+  .price-feature { font-size: 13px; color: var(--ink-3); padding: 5px 0; border-bottom: 1px solid var(--border); }
+  .price-feature:last-child { border-bottom: none; }
+
+  /* Open questions */
+  .oq-item {
+    display: flex;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: flex-start;
+  }
+  .oq-item:last-child { border-bottom: none; }
+  .oq-num {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--purple);
+    min-width: 20px;
+  }
+  .oq-text { font-size: 14px; color: var(--ink-2); line-height: 1.6; }
+
+  /* KPI */
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+  .kpi-card {
+    background: var(--surface-2);
+    border-radius: 10px;
+    padding: 1rem;
+  }
+  .kpi-label { font-size: 11px; color: var(--ink-4); margin-bottom: 4px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; }
+  .kpi-value { font-family: var(--font-display); font-size: 24px; color: var(--ink); margin-bottom: 2px; }
+  .kpi-sub { font-size: 12px; color: var(--ink-4); }
+
+  /* User story */
+  .story-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+  }
+  .story-persona {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--teal);
+    margin-bottom: 6px;
+  }
+  .story-text { font-size: 14px; color: var(--ink-2); line-height: 1.65; }
+  .story-text strong { color: var(--ink); font-weight: 600; }
+
+  /* Print */
+  @media print {
+    .sidebar { display: none; }
+    .layout { grid-template-columns: 1fr; }
+    .main { padding: 2rem; }
+  }
+
+  @media (max-width: 768px) {
+    .layout { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+    .main { padding: 1.5rem; }
+    .card-grid-2, .card-grid-3 { grid-template-columns: 1fr; }
+    .price-grid { grid-template-columns: 1fr; }
+    .kpi-grid { grid-template-columns: 1fr 1fr; }
+    .risk-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- Sidebar Nav -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">Pakka Quote</div>
+    <div class="sidebar-sub">PRD · v1.0</div>
+
+    <div class="nav-section">Overview</div>
+    <a class="nav-item" href="#overview">Product overview</a>
+    <a class="nav-item" href="#problem">Problem statement</a>
+    <a class="nav-item" href="#users">Target users</a>
+    <a class="nav-item" href="#goals">Goals & success metrics</a>
+
+    <div class="nav-section">Product</div>
+    <a class="nav-item" href="#flow">Core flow</a>
+    <a class="nav-item" href="#conversations">Conversation design</a>
+    <a class="nav-item" href="#scope">MVP scope</a>
+    <a class="nav-item" href="#features">Feature requirements</a>
+
+    <div class="nav-section">Technical</div>
+    <a class="nav-item" href="#architecture">Architecture</a>
+    <a class="nav-item" href="#stack">Tech stack</a>
+    <a class="nav-item" href="#whatsapp">WhatsApp setup</a>
+
+    <div class="nav-section">Go-to-market</div>
+    <a class="nav-item" href="#validation">Validation plan</a>
+    <a class="nav-item" href="#timeline">Build timeline</a>
+    <a class="nav-item" href="#gtm">Go-to-market</a>
+    <a class="nav-item" href="#pricing">Pricing</a>
+
+    <div class="nav-section">Risk & unknowns</div>
+    <a class="nav-item" href="#risks">Key risks</a>
+    <a class="nav-item" href="#openqs">Open questions</a>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main">
+
+    <!-- Cover -->
+    <div class="cover" id="overview">
+      <div class="cover-badge">Product Requirements Document</div>
+      <h1>Pakka Quote</h1>
+      <p class="cover-desc">AI-powered inquiry-to-proposal system for Indian manufacturing and trading SMBs. Delivered entirely over WhatsApp and email. No app. No dashboard. No behavior change.</p>
+      <div class="cover-meta">
+        <div class="meta-item">
+          <div class="meta-label">Status</div>
+          <div class="meta-value">Pre-validation</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Version</div>
+          <div class="meta-value">1.0 — MVP</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Build target</div>
+          <div class="meta-value">10 days</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Platform</div>
+          <div class="meta-value">Innovatily</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Last updated</div>
+          <div class="meta-value">April 2026</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Problem -->
+    <div class="section" id="problem">
+      <div class="section-label">01 — Problem</div>
+      <h2>Why this exists</h2>
+      <p>Indian manufacturing and trading SMBs — steel, textiles, chemicals, FMCG — operate in high-velocity B2B environments where speed of response directly determines whether a deal is won or lost. The status quo is broken in five specific ways.</p>
+      <div class="card">
+        <div class="problem-item">
+          <div class="problem-num">1</div>
+          <div class="problem-text">Inquiries arrive via WhatsApp and email at all hours. Responses take 1–3 days. By then, the buyer has moved on.</div>
+        </div>
+        <div class="problem-item">
+          <div class="problem-num">2</div>
+          <div class="problem-text">The business owner is the bottleneck. Pricing lives in their head, not in any system. Nothing can move without them.</div>
+        </div>
+        <div class="problem-item">
+          <div class="problem-num">3</div>
+          <div class="problem-text">Proposals are informal, inconsistent, and unbranded — sent as WhatsApp text or rough Excel sheets. No standard format, frequent errors.</div>
+        </div>
+        <div class="problem-item">
+          <div class="problem-num">4</div>
+          <div class="problem-text">There's no follow-up discipline. Deals die in silence because no one remembered to nudge the buyer on day 3.</div>
+        </div>
+        <div class="problem-item">
+          <div class="problem-num">5</div>
+          <div class="problem-text">No pipeline visibility. The owner doesn't know how many open inquiries exist, which are warm, or which were never responded to.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Users -->
+    <div class="section" id="users">
+      <div class="section-label">02 — Users</div>
+      <h2>Who we're building for</h2>
+      <p>One primary user. One secondary. The product is designed around the primary user's existing behavior — not around asking them to adopt new habits.</p>
+
+      <div class="card-grid card-grid-2">
+        <div class="card">
+          <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--teal);margin-bottom:8px;">Primary — The SMB Owner</div>
+          <h3 style="margin-top:0;">Rajesh, 38–52</h3>
+          <p style="font-size:13px;">Runs a manufacturing or trading business with ₹1–10 crore annual revenue. Handles 5–30 inquiries per week. Speaks Hindi/Hinglish. Lives on WhatsApp. Distrusts software that requires behavior change or training.</p>
+          <p style="font-size:13px;margin-bottom:0;"><strong style="color:var(--ink-2);">Key insight:</strong> He will use Pakka Quote if and only if it requires fewer taps than what he does today. If it adds friction, he abandons it.</p>
+        </div>
+        <div class="card">
+          <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--amber);margin-bottom:8px;">Secondary — The Buyer</div>
+          <h3 style="margin-top:0;">The inquiry sender</h3>
+          <p style="font-size:13px;">A procurement manager, trader, or retailer placing inquiries via WhatsApp or email. Doesn't know or interact with Pakka Quote directly. Receives a professional PDF proposal from the SMB owner.</p>
+          <p style="font-size:13px;margin-bottom:0;"><strong style="color:var(--ink-2);">Key insight:</strong> Their experience improves because they get a faster, more professional response. They never know Pakka Quote exists.</p>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:0;">
+        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--purple);margin-bottom:10px;">User stories</div>
+        <div class="story-card">
+          <div class="story-persona">SMB Owner</div>
+          <div class="story-text">When <strong>a new inquiry arrives on my WhatsApp</strong>, I want to <strong>forward it and receive a ready-to-send proposal within minutes</strong>, so that <strong>I don't lose the deal to a competitor who responds faster</strong>.</div>
+        </div>
+        <div class="story-card">
+          <div class="story-persona">SMB Owner</div>
+          <div class="story-text">When <strong>I receive a parsed inquiry summary</strong>, I want to <strong>type one number (my price) and say SEND</strong>, so that <strong>I stay in control without doing administrative work</strong>.</div>
+        </div>
+        <div class="story-card" style="margin-bottom:0;">
+          <div class="story-persona">SMB Owner</div>
+          <div class="story-text">When <strong>I haven't heard back from a buyer</strong>, I want <strong>automatic follow-ups sent on my behalf</strong>, so that <strong>I recover deals I would otherwise forget</strong>.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Goals & metrics -->
+    <div class="section" id="goals">
+      <div class="section-label">03 — Goals</div>
+      <h2>Success metrics</h2>
+      <p>MVP success is measured by two things: does the loop work end-to-end, and are real users willing to pay for it.</p>
+
+      <div class="kpi-grid" style="margin-bottom:1.5rem;">
+        <div class="kpi-card">
+          <div class="kpi-label">Time to proposal</div>
+          <div class="kpi-value">&lt;5 min</div>
+          <div class="kpi-sub">From inquiry received to PDF ready</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Owner interactions</div>
+          <div class="kpi-value">2</div>
+          <div class="kpi-sub">Price + Approve. Nothing else.</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Beta target</div>
+          <div class="kpi-value">3</div>
+          <div class="kpi-sub">Paying customers in 30 days</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Parser accuracy</div>
+          <div class="kpi-value">90%</div>
+          <div class="kpi-sub">Correct product/qty/specs extracted</div>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- Core flow -->
+    <div class="section" id="flow">
+      <div class="section-label">04 — Product</div>
+      <h2>Core flow</h2>
+      <p>The entire product is this loop. Owner touches it twice — once to give price, once to approve. Everything else is automated.</p>
+
+      <div style="overflow-x:auto;padding:1rem 0;">
+        <div style="display:flex;align-items:center;gap:6px;min-width:600px;">
+          <div style="background:white;border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:12px;font-weight:500;color:var(--ink-2);text-align:center;white-space:nowrap;">Inquiry in<br><span style="font-size:10px;color:var(--ink-4);font-weight:400;">WhatsApp / email</span></div>
+          <div style="color:var(--ink-4);font-size:16px;">→</div>
+          <div style="background:white;border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:12px;font-weight:500;color:var(--ink-2);text-align:center;white-space:nowrap;">AI parses<br><span style="font-size:10px;color:var(--ink-4);font-weight:400;">text/voice/image/PDF</span></div>
+          <div style="color:var(--ink-4);font-size:16px;">→</div>
+          <div style="background:var(--teal-light);border:1px solid var(--teal-mid);border-radius:8px;padding:10px 14px;font-size:12px;font-weight:500;color:var(--teal);text-align:center;white-space:nowrap;">Owner gets summary<br><span style="font-size:10px;color:var(--teal);font-weight:400;">via WhatsApp</span></div>
+          <div style="color:var(--ink-4);font-size:16px;">→</div>
+          <div style="background:var(--teal-light);border:1px solid var(--teal-mid);border-radius:8px;padding:10px 14px;font-size:12px;font-weight:500;color:var(--teal);text-align:center;white-space:nowrap;">Owner gives price<br><span style="font-size:10px;color:var(--teal);font-weight:400;">one reply</span></div>
+          <div style="color:var(--ink-4);font-size:16px;">→</div>
+          <div style="background:white;border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:12px;font-weight:500;color:var(--ink-2);text-align:center;white-space:nowrap;">Proposal generated<br><span style="font-size:10px;color:var(--ink-4);font-weight:400;">PDF with branding</span></div>
+          <div style="color:var(--ink-4);font-size:16px;">→</div>
+          <div style="background:var(--teal-light);border:1px solid var(--teal-mid);border-radius:8px;padding:10px 14px;font-size:12px;font-weight:500;color:var(--teal);text-align:center;white-space:nowrap;">Owner approves<br><span style="font-size:10px;color:var(--teal);font-weight:400;">SEND / EDIT / SKIP</span></div>
+          <div style="color:var(--ink-4);font-size:16px;">→</div>
+          <div style="background:white;border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:12px;font-weight:500;color:var(--ink-2);text-align:center;white-space:nowrap;">Proposal sent<br><span style="font-size:10px;color:var(--ink-4);font-weight:400;">via email</span></div>
+          <div style="color:var(--ink-4);font-size:16px;">→</div>
+          <div style="background:white;border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:12px;font-weight:500;color:var(--ink-2);text-align:center;white-space:nowrap;">Auto follow-up<br><span style="font-size:10px;color:var(--ink-4);font-weight:400;">day 2, 5, 10</span></div>
+        </div>
+      </div>
+      <p style="font-size:13px;color:var(--ink-4);margin-top:0.5rem;">Teal steps require owner input. White steps are fully automated.</p>
+    </div>
+
+    <!-- Conversations -->
+    <div class="section" id="conversations">
+      <div class="section-label">05 — Conversation design</div>
+      <h2>The three conversations</h2>
+      <p>Pakka Quote has three distinct conversation types, each with a different person at one end. Getting these right is the core design challenge.</p>
+
+      <h3>Conversation 1 — Onboarding (happens once)</h3>
+      <p style="font-size:13px;">Collects the owner's catalog, payment terms, GST details, and branding. 5–8 questions. Must complete in under 5 minutes.</p>
+      <div class="chat-mockup">
+        <div class="chat-title">Onboarding flow</div>
+        <div class="msg them">
+          <div class="msg-sender">Pakka Quote</div>
+          <div class="msg-bubble">Welcome to Pakka Quote. Let's set you up in 5 minutes.
+
+What's your business name and GST number?</div>
+        </div>
+        <div class="msg us">
+          <div class="msg-sender">Rajesh</div>
+          <div class="msg-bubble">Sharma Steel Traders
+GST 27AABCS1234A1Z5</div>
+        </div>
+        <div class="msg them">
+          <div class="msg-sender">Pakka Quote</div>
+          <div class="msg-bubble">Got it. Tell me your top 3–4 products with typical sizes or grades you quote most often.</div>
+        </div>
+        <div class="msg us">
+          <div class="msg-sender">Rajesh</div>
+          <div class="msg-bubble">MS Pipes 1 to 4 inch, TMT Bars Fe500, GI Sheets 0.5mm to 2mm</div>
+        </div>
+        <div class="msg them">
+          <div class="msg-sender">Pakka Quote</div>
+          <div class="msg-bubble">What are your standard payment terms?
+
+(e.g. 50% advance, balance before dispatch)</div>
+        </div>
+        <div class="msg us">
+          <div class="msg-sender">Rajesh</div>
+          <div class="msg-bubble">30 days credit for regular customers, advance for new ones</div>
+        </div>
+        <div class="msg them">
+          <div class="msg-sender">Pakka Quote</div>
+          <div class="msg-bubble">You're set up. Forward me any inquiry and I'll handle it from here.</div>
+        </div>
+      </div>
+
+      <h3>Conversation 2 — Inquiry handling (the core loop)</h3>
+      <p style="font-size:13px;">Triggered every time an inquiry arrives. Owner does two things: give a price, say SEND. This conversation must feel instant and frictionless.</p>
+      <div class="chat-mockup">
+        <div class="chat-title">Inquiry → proposal flow</div>
+        <div class="msg us">
+          <div class="msg-sender">Rajesh (forwarding customer message)</div>
+          <div class="msg-bubble">bhai 500 kg TMT Fe500 12mm chahiye, Tuesday tak mil sakta hai kya? Surat delivery</div>
+        </div>
+        <div class="msg them">
+          <div class="msg-sender">Pakka Quote</div>
+          <div class="msg-bubble">New inquiry from +91 98XXX XXXXX
+
+Product: TMT Bars Fe500, 12mm
+Quantity: 500 kg
+Delivery: Surat, by Tuesday
+Urgency: High
+
+What price per kg do you want to quote?
+(or type "skip" to ignore)</div>
+        </div>
+        <div class="msg us">
+          <div class="msg-sender">Rajesh</div>
+          <div class="msg-bubble">68.50</div>
+        </div>
+        <div class="msg them">
+          <div class="msg-sender">Pakka Quote</div>
+          <div class="msg-bubble">DRAFT PROPOSAL
+
+Sharma Steel Traders → Buyer
+TMT Fe500 12mm — 500 kg @ Rs 68.50/kg
+Total: Rs 34,250 + GST 18%
+Delivery: Surat by Tuesday
+Valid: 48 hours | Terms: Advance
+
+Reply SEND · EDIT · SKIP</div>
+        </div>
+        <div class="msg us">
+          <div class="msg-sender">Rajesh</div>
+          <div class="msg-bubble">SEND</div>
+        </div>
+        <div class="msg them">
+          <div class="msg-sender">Pakka Quote</div>
+          <div class="msg-bubble">Proposal sent. Follow-up scheduled: Day 2, Day 5, Day 10.</div>
+        </div>
+      </div>
+
+      <h3>Conversation 3 — Follow-up (automated)</h3>
+      <p style="font-size:13px;">Business-initiated outbound messages on behalf of the SMB owner. Sent via email for MVP (avoids WhatsApp template approval complexity). Three touches: warm nudge, soft check-in, close the loop.</p>
+      <div class="chat-mockup">
+        <div class="chat-title">Follow-up email sequence</div>
+        <div class="msg them">
+          <div class="msg-sender">Day 2 — Warm nudge</div>
+          <div class="msg-bubble">Hi [Name], following up on our proposal for 500kg TMT Fe500. Happy to clarify specs or adjust terms if needed.</div>
+        </div>
+        <div class="msg them">
+          <div class="msg-sender">Day 5 — Soft check-in</div>
+          <div class="msg-bubble">Hi [Name], just checking if the proposal is still relevant. We can hold the pricing for 2 more days.</div>
+        </div>
+        <div class="msg them">
+          <div class="msg-sender">Day 10 — Close the loop</div>
+          <div class="msg-bubble">Hi [Name], should we keep this inquiry open or close it out? Happy to revisit when you're ready.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scope -->
+    <div class="section" id="scope">
+      <div class="section-label">06 — Scope</div>
+      <h2>MVP scope</h2>
+
+      <div class="card-grid card-grid-2">
+        <div class="card">
+          <h3 style="color:var(--teal);margin-top:0;">In scope</h3>
+          <div class="scope-item"><div class="scope-dot dot-teal"></div>WhatsApp Business API ingestion via Innovatily's verified account</div>
+          <div class="scope-item"><div class="scope-dot dot-teal"></div>Email ingestion via Gmail API / IMAP</div>
+          <div class="scope-item"><div class="scope-dot dot-teal"></div>AI inquiry parser — text, voice (Whisper), image, PDF</div>
+          <div class="scope-item"><div class="scope-dot dot-teal"></div>Conversational catalog onboarding via WhatsApp</div>
+          <div class="scope-item"><div class="scope-dot dot-teal"></div>Owner summary + manual price input flow</div>
+          <div class="scope-item"><div class="scope-dot dot-teal"></div>Proposal PDF generator with business branding</div>
+          <div class="scope-item"><div class="scope-dot dot-teal"></div>SEND / EDIT / SKIP approval flow</div>
+          <div class="scope-item"><div class="scope-dot dot-teal"></div>Auto follow-up sequence — day 2, 5, 10 via email</div>
+        </div>
+        <div class="card">
+          <h3 style="color:var(--amber);margin-top:0;">Out of scope (v1)</h3>
+          <div class="scope-item"><div class="scope-dot dot-amber"></div>Web dashboard or frontend UI</div>
+          <div class="scope-item"><div class="scope-dot dot-amber"></div>Tally / ERP integration</div>
+          <div class="scope-item"><div class="scope-dot dot-amber"></div>Multi-user or team accounts</div>
+          <div class="scope-item"><div class="scope-dot dot-amber"></div>Automated pricing (owner prices manually)</div>
+          <div class="scope-item"><div class="scope-dot dot-amber"></div>CRM pipeline view</div>
+          <div class="scope-item"><div class="scope-dot dot-amber"></div>Billing and subscription management</div>
+          <div class="scope-item"><div class="scope-dot dot-amber"></div>Per-customer WhatsApp Business numbers</div>
+          <div class="scope-item"><div class="scope-dot dot-amber"></div>Counter-offer / negotiation flows</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature requirements -->
+    <div class="section" id="features">
+      <div class="section-label">07 — Requirements</div>
+      <h2>Feature requirements</h2>
+
+      <h3>F1 — Inquiry ingestion</h3>
+      <div class="card">
+        <div class="scope-item"><div class="scope-dot dot-teal"></div>Accept forwarded WhatsApp messages from the owner to the Pakka Quote number</div>
+        <div class="scope-item"><div class="scope-dot dot-teal"></div>Poll or webhook-receive emails from configured business email address</div>
+        <div class="scope-item"><div class="scope-dot dot-teal"></div>Support text, voice notes (transcribed via Whisper), images (via Vision), and PDF attachments</div>
+        <div class="scope-item"><div class="scope-dot dot-teal"></div>Deduplicate inquiries from the same sender within a 24-hour window</div>
+      </div>
+
+      <h3>F2 — AI inquiry parser</h3>
+      <div class="card">
+        <div class="scope-item"><div class="scope-dot dot-teal"></div>Extract: product name, quantity, unit, specifications, delivery location, delivery deadline, urgency signals</div>
+        <div class="scope-item"><div class="scope-dot dot-teal"></div>Handle Hindi, Hinglish, and mixed-language input reliably</div>
+        <div class="scope-item"><div class="scope-dot dot-teal"></div>If extraction confidence is low, ask the owner one clarifying question before proceeding</div>
+        <div class="scope-item"><div class="scope-dot dot-teal"></div>Match parsed product against the owner's catalog to suggest relevant items</div>
+        <div class="scope-item"><div class="scope-dot dot-teal"></div>Target: 90%+ correct extraction on real inquiry corpus (validated before build)</div>
+      </div>
+
+      <h3>F3 — Owner approval flow</h3>
+      <div class="card">
+        <div class="scope-item"><div class="scope-dot dot-teal"></div>Send structured summary to owner's WhatsApp: product, qty, specs, delivery, urgency</div>
+        <div class="scope-item"><div class="scope-dot dot-teal"></div>Accept price input as a plain number (e.g. "68.50") — no formatting required</div>
+        <div class="scope-item"><div class="scope-dot dot-teal"></div>Show draft proposal summary before sending — owner must explicitly approve</div>
+        <div class="scope-item"><div class="scope-dot dot-teal"></div>Support three commands: SEND (send as-is), EDIT (re-prompt for changes), SKIP (archive without sending)</div>
+        <div class="scope-item"><div class="scope-dot dot-teal"></div>Timeout after 4 hours without response — flag as pending in system</div>
+      </div>
+
+      <h3>F4 — Proposal PDF generator</h3>
+      <div class="card">
+        <div class="scope-item"><div class="scope-dot dot-teal"></div>Generate professional PDF with: business name, logo, GST number, line items, total, GST breakdown, payment terms, validity period</div>
+        <div class="scope-item"><div class="scope-dot dot-teal"></div>Proposal number auto-incremented per business (e.g. SST-2026-047)</div>
+        <div class="scope-item"><div class="scope-dot dot-teal"></div>Branding sourced from onboarding — name, logo, colors</div>
+        <div class="scope-item"><div class="scope-dot dot-teal"></div>Delivered to buyer via email with PDF attachment and plain-text body</div>
+        <div class="scope-item"><div class="scope-dot dot-teal"></div>Sent from owner's configured email address (not a generic Pakka Quote domain)</div>
+      </div>
+
+      <h3>F5 — Follow-up automation</h3>
+      <div class="card">
+        <div class="scope-item"><div class="scope-dot dot-teal"></div>Schedule follow-up emails at day 2, 5, and 10 after proposal send</div>
+        <div class="scope-item"><div class="scope-dot dot-teal"></div>Cancel sequence automatically if buyer replies to any email</div>
+        <div class="scope-item"><div class="scope-dot dot-teal"></div>Notify owner via WhatsApp when buyer replies to a follow-up</div>
+        <div class="scope-item"><div class="scope-dot dot-teal"></div>Owner can cancel a follow-up sequence by replying STOP to the WhatsApp notification</div>
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- Architecture -->
+    <div class="section" id="architecture">
+      <div class="section-label">08 — Technical</div>
+      <h2>Architecture</h2>
+      <p>All customers share a single Pakka Quote WhatsApp number (Innovatily's verified account). The system routes by phone number to identify which business account an incoming message belongs to. Proposals go to buyers via email, not WhatsApp.</p>
+
+      <div class="card" style="font-family:var(--font-mono);font-size:13px;color:var(--ink-2);line-height:2;">
+        <div style="color:var(--ink-4);font-size:11px;margin-bottom:12px;font-family:var(--font-body);font-weight:600;text-transform:uppercase;letter-spacing:0.08em;">Message routing</div>
+        Buyer inquiry → Owner's personal WhatsApp<br>
+        Owner forwards → <span style="color:var(--teal);">Pakka Quote number (Innovatily)</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓<br>
+        <span style="color:var(--teal);">Webhook identifies owner by phone number</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓<br>
+        AI parses → Summary sent back to owner<br>
+        Owner replies with price<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓<br>
+        PDF generated → <span style="color:var(--purple);">Sent to buyer via email</span><br>
+        Celery schedules follow-up jobs<br>
+      </div>
+    </div>
+
+    <!-- Stack -->
+    <div class="section" id="stack">
+      <div class="section-label">09 — Stack</div>
+      <h2>Tech stack</h2>
+
+      <div class="card">
+        <div class="card-grid card-grid-3">
+          <div>
+            <p style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink-4);margin-bottom:8px;">Channels</p>
+            <span class="tech-tag tech-teal">360dialog</span>
+            <span class="tech-tag tech-teal">Gmail API</span>
+            <span class="tech-tag tech-teal">IMAP</span>
+          </div>
+          <div>
+            <p style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink-4);margin-bottom:8px;">AI layer</p>
+            <span class="tech-tag tech-purple">Claude API</span>
+            <span class="tech-tag tech-purple">Whisper (voice)</span>
+            <span class="tech-tag tech-purple">Vision (images)</span>
+          </div>
+          <div>
+            <p style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink-4);margin-bottom:8px;">Backend</p>
+            <span class="tech-tag tech-blue">Python / FastAPI</span>
+            <span class="tech-tag tech-blue">PostgreSQL</span>
+            <span class="tech-tag tech-blue">Redis + Celery</span>
+          </div>
+        </div>
+        <hr style="margin:1rem 0;">
+        <div class="card-grid card-grid-3">
+          <div>
+            <p style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink-4);margin-bottom:8px;">Documents</p>
+            <span class="tech-tag tech-coral">WeasyPrint</span>
+            <span class="tech-tag tech-coral">ReportLab</span>
+          </div>
+          <div>
+            <p style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink-4);margin-bottom:8px;">Hosting</p>
+            <span class="tech-tag tech-amber">Railway / Render</span>
+            <span class="tech-tag tech-amber">Cloudflare</span>
+          </div>
+          <div>
+            <p style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink-4);margin-bottom:8px;">Queue</p>
+            <span class="tech-tag tech-blue">Celery beat</span>
+            <span class="tech-tag tech-blue">Redis streams</span>
+          </div>
+        </div>
+        <div style="margin-top:1rem;padding:10px 12px;background:var(--teal-light);border-radius:8px;font-size:13px;color:var(--teal);">
+          AI stack decision: Use Claude API as the single LLM for text parsing, proposal generation, and vision tasks. Whisper handles voice-to-text only. Avoid running two LLM providers in MVP.
+        </div>
+      </div>
+    </div>
+
+    <!-- WhatsApp setup -->
+    <div class="section" id="whatsapp">
+      <div class="section-label">10 — WhatsApp</div>
+      <h2>WhatsApp setup status</h2>
+
+      <div class="card-grid card-grid-2">
+        <div class="card">
+          <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--teal);margin-bottom:8px;">Already done</div>
+          <div class="scope-item"><div class="scope-dot dot-teal"></div>Innovatily Meta Business account — verified (green badge)</div>
+          <div class="scope-item"><div class="scope-dot dot-teal"></div>WhatsApp Business API previously set up (not actively used)</div>
+          <div class="scope-item"><div class="scope-dot dot-teal"></div>Meta Business Verification — complete, no waiting period</div>
+        </div>
+        <div class="card">
+          <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--amber);margin-bottom:8px;">Still needed</div>
+          <div class="scope-item"><div class="scope-dot dot-amber"></div>Verify phone number status is Active in Business Manager</div>
+          <div class="scope-item"><div class="scope-dot dot-amber"></div>Reconfigure webhook endpoint for Pakka Quote backend</div>
+          <div class="scope-item"><div class="scope-dot dot-amber"></div>Validate 360dialog API keys are still live</div>
+          <div class="scope-item"><div class="scope-dot dot-amber"></div>Submit and get approval for follow-up message templates</div>
+        </div>
+      </div>
+
+      <div style="padding:12px 14px;background:var(--blue-light);border-radius:8px;font-size:13px;color:var(--blue);margin-top:0;">
+        <strong>Architecture decision:</strong> All customers share Innovatily's WhatsApp number in v1. Each customer gets their own per-business WhatsApp number only in v2 (Unlimited tier). This eliminates the Meta Business Verification burden from the customer onboarding entirely.
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- Validation -->
+    <div class="section" id="validation">
+      <div class="section-label">11 — Validation</div>
+      <h2>Validate before building</h2>
+      <p>Run the entire Pakka Quote workflow manually for 2 weeks before writing a line of code. You are the AI. Your personal WhatsApp is the product number. Canva or Word is the PDF generator.</p>
+
+      <div class="card">
+        <h3 style="margin-top:0;">The manual sprint — 2 weeks</h3>
+        <div class="scope-item"><div class="scope-dot dot-teal"></div>Recruit 1 SMB owner from your network — offer the service free for 2 weeks</div>
+        <div class="scope-item"><div class="scope-dot dot-teal"></div>They forward real inquiries to your WhatsApp number</div>
+        <div class="scope-item"><div class="scope-dot dot-teal"></div>You manually parse, summarize, collect price, generate PDF in Canva, send via email</div>
+        <div class="scope-item"><div class="scope-dot dot-teal"></div>Collect every real inquiry — target 50 samples for the parser corpus</div>
+        <div class="scope-item"><div class="scope-dot dot-teal"></div>Document every point of friction: where does the owner get confused? What do they ask?</div>
+        <div class="scope-item"><div class="scope-dot dot-teal"></div>At the end of week 2, ask if they'd pay ₹999/month for this. That's your go/no-go signal.</div>
+      </div>
+
+      <div style="padding:12px 14px;background:var(--amber-light);border-radius:8px;font-size:13px;color:var(--amber);margin-top:0;">
+        <strong>What you learn:</strong> Real inquiry language and format variance, exactly which conversation steps break down, what the owner actually cares about, whether the proposal quality is good enough to impress the buyer — all before spending a single day building.
+      </div>
+    </div>
+
+    <!-- Timeline -->
+    <div class="section" id="timeline">
+      <div class="section-label">12 — Timeline</div>
+      <h2>Build timeline — 10 days</h2>
+      <p>Timeline starts after manual validation sprint is complete and go decision is made.</p>
+
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-dot" style="background:var(--teal-mid);"></div>
+          <div class="tl-range">Days 1–2</div>
+          <div class="tl-tasks">
+            <div class="tl-task" style="border-left-color:var(--teal-mid);">Reconfigure WhatsApp webhook, echo bot live on Innovatily number</div>
+            <div class="tl-task" style="border-left-color:var(--teal-mid);">Gmail API connected, incoming emails captured and stored</div>
+            <div class="tl-task" style="border-left-color:var(--teal-mid);">WhatsApp message template approvals submitted</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot" style="background:var(--purple-mid);"></div>
+          <div class="tl-range">Days 3–4</div>
+          <div class="tl-tasks">
+            <div class="tl-task" style="border-left-color:var(--purple-mid);">AI inquiry parser — extract product, qty, specs, urgency from text</div>
+            <div class="tl-task" style="border-left-color:var(--purple-mid);">Multi-format support — voice via Whisper, images via Claude vision</div>
+            <div class="tl-task" style="border-left-color:var(--purple-mid);">Test parser against 50-sample corpus from manual sprint</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot" style="background:var(--amber-mid);"></div>
+          <div class="tl-range">Days 5–6</div>
+          <div class="tl-tasks">
+            <div class="tl-task" style="border-left-color:var(--amber-mid);">Conversational catalog builder — onboarding flow via WhatsApp</div>
+            <div class="tl-task" style="border-left-color:var(--amber-mid);">Owner summary message format + price input state machine</div>
+            <div class="tl-task" style="border-left-color:var(--amber-mid);">Multi-tenant routing — identify owner by phone number</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot" style="background:var(--coral-mid);"></div>
+          <div class="tl-range">Days 7–8</div>
+          <div class="tl-tasks">
+            <div class="tl-task" style="border-left-color:var(--coral-mid);">Proposal PDF generator with branding — WeasyPrint/ReportLab</div>
+            <div class="tl-task" style="border-left-color:var(--coral-mid);">SEND / EDIT / SKIP approval flow + email delivery</div>
+            <div class="tl-task" style="border-left-color:var(--coral-mid);">Celery follow-up scheduler — day 2, 5, 10 email jobs</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot" style="background:var(--teal-mid);"></div>
+          <div class="tl-range">Days 9–10</div>
+          <div class="tl-tasks">
+            <div class="tl-task" style="border-left-color:var(--teal-mid);">End-to-end test with real inquiry data from manual sprint</div>
+            <div class="tl-task" style="border-left-color:var(--teal-mid);">First beta user onboarded, follow-up sequence live</div>
+            <div class="tl-task" style="border-left-color:var(--teal-mid);">Bug fixes, edge case handling, stability check</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GTM -->
+    <div class="section" id="gtm">
+      <div class="section-label">13 — Go-to-market</div>
+      <h2>30-day GTM plan</h2>
+
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-dot" style="background:var(--teal-mid);"></div>
+          <div class="tl-range">Week 1–2</div>
+          <div class="tl-tasks">
+            <div class="tl-task" style="border-left-color:var(--teal-mid);">1 free pilot with known contact — document every friction point</div>
+            <div class="tl-task" style="border-left-color:var(--teal-mid);">Outreach to 20 IndiaMART sellers personally — not cold email, direct WhatsApp</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot" style="background:var(--purple-mid);"></div>
+          <div class="tl-range">Week 3</div>
+          <div class="tl-tasks">
+            <div class="tl-task" style="border-left-color:var(--purple-mid);">Approach 5 CAs — offer 20% recurring commission for referrals</div>
+            <div class="tl-task" style="border-left-color:var(--purple-mid);">Post LinkedIn demo — before/after proposal time. Show real numbers.</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot" style="background:var(--amber-mid);"></div>
+          <div class="tl-range">Week 4</div>
+          <div class="tl-tasks">
+            <div class="tl-task" style="border-left-color:var(--amber-mid);">Ask every user for 2 referrals — warm intro only</div>
+            <div class="tl-task" style="border-left-color:var(--amber-mid);">First ₹2,999/mo paying customers — collect video testimonials</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pricing -->
+    <div class="section" id="pricing">
+      <div class="section-label">14 — Pricing</div>
+      <h2>Pricing model</h2>
+      <p>Proposal volume as the value metric. Pitch: "One recovered deal pays for 6 months." First 10 customers at ₹999 in exchange for testimonials and feedback.</p>
+
+      <div class="price-grid">
+        <div class="price-card">
+          <div class="price-name">Starter</div>
+          <div class="price-amount">₹2,999</div>
+          <div class="price-period">per month</div>
+          <div class="price-feature">50 proposals/month</div>
+          <div class="price-feature">Email follow-ups</div>
+          <div class="price-feature">Proposal PDF branding</div>
+          <div class="price-feature">WhatsApp approval flow</div>
+        </div>
+        <div class="price-card featured">
+          <div class="price-badge">Most popular</div>
+          <div class="price-name">Growth</div>
+          <div class="price-amount">₹5,999</div>
+          <div class="price-period">per month</div>
+          <div class="price-feature">200 proposals/month</div>
+          <div class="price-feature">Email follow-ups</div>
+          <div class="price-feature">Proposal PDF branding</div>
+          <div class="price-feature">WhatsApp approval flow</div>
+          <div class="price-feature">Priority support</div>
+        </div>
+        <div class="price-card">
+          <div class="price-name">Unlimited</div>
+          <div class="price-amount">₹9,999</div>
+          <div class="price-period">per month</div>
+          <div class="price-feature">Unlimited proposals</div>
+          <div class="price-feature">Email follow-ups</div>
+          <div class="price-feature">Proposal PDF branding</div>
+          <div class="price-feature">WhatsApp approval flow</div>
+          <div class="price-feature">Dedicated onboarding</div>
+          <div class="price-feature">WhatsApp delivery (v2)</div>
+        </div>
+      </div>
+      <p style="font-size:13px;">Note: Per-customer WhatsApp Business numbers (for proposals sent from their own number) is a v2 feature, listed here to justify the Unlimited tier premium.</p>
+    </div>
+
+    <hr>
+
+    <!-- Risks -->
+    <div class="section" id="risks">
+      <div class="section-label">15 — Risk</div>
+      <h2>Key risks</h2>
+
+      <div class="risk-grid">
+        <div class="risk-cell risk-prob"><div class="risk-label">Risk</div>Parser fails on real Hinglish/voice inquiry data</div>
+        <div class="risk-cell risk-mit"><div class="risk-label">Mitigation</div>Collect 50 real samples during manual sprint. Test before building parser.</div>
+      </div>
+      <div class="risk-grid">
+        <div class="risk-cell risk-prob"><div class="risk-label">Risk</div>Owner loses trust on first wrong price match</div>
+        <div class="risk-cell risk-mit"><div class="risk-label">Mitigation</div>Owner manually sets all prices in v1. Zero auto-pricing until trust is established.</div>
+      </div>
+      <div class="risk-grid">
+        <div class="risk-cell risk-prob"><div class="risk-label">Risk</div>SMB owners expect free tools or one-time payment</div>
+        <div class="risk-cell risk-mit"><div class="risk-label">Mitigation</div>Validate willingness to pay during manual sprint before any code. Offer ₹500/proposal first.</div>
+      </div>
+      <div class="risk-grid">
+        <div class="risk-cell risk-prob"><div class="risk-label">Risk</div>WhatsApp message template rejection delays follow-up feature</div>
+        <div class="risk-cell risk-mit"><div class="risk-label">Mitigation</div>Submit templates day 1. Email-only follow-ups for MVP — no dependency on template approval.</div>
+      </div>
+      <div class="risk-grid">
+        <div class="risk-cell risk-prob"><div class="risk-label">Risk</div>Old Innovatily WhatsApp number has quality rating issues</div>
+        <div class="risk-cell risk-mit"><div class="risk-label">Mitigation</div>Check phone number status in Business Manager before building. Resolve before day 1.</div>
+      </div>
+    </div>
+
+    <!-- Open questions -->
+    <div class="section" id="openqs">
+      <div class="section-label">16 — Unknowns</div>
+      <h2>Open questions</h2>
+      <p>These must be answered — ideally during the manual sprint — before the full build begins.</p>
+
+      <div class="card">
+        <div class="oq-item">
+          <div class="oq-num">Q1</div>
+          <div class="oq-text">Which industry vertical to target first — steel, textiles, chemicals, FMCG? Choose based on existing network, not market size.</div>
+        </div>
+        <div class="oq-item">
+          <div class="oq-num">Q2</div>
+          <div class="oq-text">What does the complete onboarding conversation look like end to end? What questions can be skipped and inferred later?</div>
+        </div>
+        <div class="oq-item">
+          <div class="oq-num">Q3</div>
+          <div class="oq-text">How to structure the state machine for multi-turn WhatsApp conversations? What happens if the owner sends an unrecognized reply mid-flow?</div>
+        </div>
+        <div class="oq-item">
+          <div class="oq-num">Q4</div>
+          <div class="oq-text">How to handle GST, freight, and payment term variations per customer? Are these stored in the catalog or entered per-proposal?</div>
+        </div>
+        <div class="oq-item">
+          <div class="oq-num">Q5</div>
+          <div class="oq-text">Should the system support counter-offer flows — where the owner revises a proposal after buyer pushes back? (Likely v2, but needs definition.)</div>
+        </div>
+        <div class="oq-item">
+          <div class="oq-num">Q6</div>
+          <div class="oq-text">What does the proposal template look like per industry? Is one flexible template enough for v1, or do steel vs textiles require different structures?</div>
+        </div>
+        <div class="oq-item" style="border-bottom:none;">
+          <div class="oq-num">Q7</div>
+          <div class="oq-text">What is the data privacy and security stance? Where does inquiry and buyer data live, who owns it, and how is this communicated to SMB owners?</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  const navItems = document.querySelectorAll('.nav-item');
+  const sections = document.querySelectorAll('.section, .cover');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        navItems.forEach(item => {
+          item.classList.toggle('active', item.getAttribute('href') === '#' + id);
+        });
+      }
+    });
+  }, { threshold: 0.2 });
+
+  sections.forEach(section => observer.observe(section));
+
+  navItems.forEach(item => {
+    item.addEventListener('click', (e) => {
+      navItems.forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>

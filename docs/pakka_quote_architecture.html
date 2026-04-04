@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pakka Quote — Technical Architecture</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --ink: #1a1a18;
+    --ink-2: #3f3f3b;
+    --ink-3: #6b6b65;
+    --ink-4: #9a9a92;
+    --surface: #fafaf7;
+    --surface-2: #f2f2ec;
+    --surface-3: #e8e8e0;
+    --border: rgba(26,26,24,0.1);
+    --border-strong: rgba(26,26,24,0.2);
+    --teal: #0f6e56; --teal-light: #e1f5ee; --teal-mid: #1d9e75;
+    --amber: #854f0b; --amber-light: #faeeda; --amber-mid: #ba7517;
+    --coral: #993c1d; --coral-light: #faece7; --coral-mid: #d85a30;
+    --purple: #3c3489; --purple-light: #eeedfe; --purple-mid: #7f77dd;
+    --blue: #0c447c; --blue-light: #e6f1fb; --blue-mid: #378add;
+    --font-body: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+    --font-ui: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  body { font-family: var(--font-ui); background: #0e0e0c; color: #e8e8e0; font-size: 14px; line-height: 1.6; }
+
+  .page { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem; }
+
+  /* Header */
+  .header { margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .header-badge { display: inline-block; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--teal-mid); background: rgba(29,158,117,0.15); padding: 4px 12px; border-radius: 20px; margin-bottom: 1rem; border: 1px solid rgba(29,158,117,0.25); }
+  .header h1 { font-family: var(--font-ui); font-size: 32px; font-weight: 600; color: #f0f0e8; margin-bottom: 8px; letter-spacing: -0.5px; }
+  .header p { font-size: 15px; color: var(--ink-4); max-width: 600px; }
+
+  /* Section */
+  .section { margin-bottom: 4rem; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 1.5rem; }
+  .section-num { font-family: var(--font-body); font-size: 11px; color: var(--ink-4); }
+  .section-title { font-size: 18px; font-weight: 600; color: #f0f0e8; }
+
+  /* Architecture diagram boxes */
+  .arch { display: grid; gap: 1px; background: rgba(255,255,255,0.06); border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08); }
+
+  .arch-row { display: grid; gap: 1px; background: rgba(255,255,255,0.06); }
+  .arch-row-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .arch-row-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+  .arch-row-2 { grid-template-columns: 1fr 1fr; }
+  .arch-row-5 { grid-template-columns: 1fr 1fr 1fr 1fr 1fr; }
+
+  .arch-cell {
+    background: #161614;
+    padding: 1.25rem 1.5rem;
+    position: relative;
+  }
+  .arch-cell.span2 { grid-column: span 2; }
+  .arch-cell.span3 { grid-column: span 3; }
+
+  .cell-label {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    margin-bottom: 8px;
+  }
+  .cell-name { font-size: 14px; font-weight: 600; color: #f0f0e8; margin-bottom: 4px; }
+  .cell-sub { font-size: 12px; color: var(--ink-4); line-height: 1.5; }
+  .cell-tag {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin: 2px 2px 0 0;
+  }
+
+  .teal-cell .cell-label { color: var(--teal-mid); }
+  .purple-cell .cell-label { color: var(--purple-mid); }
+  .amber-cell .cell-label { color: var(--amber-mid); }
+  .coral-cell .cell-label { color: var(--coral-mid); }
+  .blue-cell .cell-label { color: var(--blue-mid); }
+  .gray-cell .cell-label { color: #888; }
+
+  .teal-tag { background: rgba(29,158,117,0.15); color: var(--teal-mid); border: 1px solid rgba(29,158,117,0.2); }
+  .purple-tag { background: rgba(127,119,221,0.15); color: var(--purple-mid); border: 1px solid rgba(127,119,221,0.2); }
+  .amber-tag { background: rgba(186,117,23,0.15); color: var(--amber-mid); border: 1px solid rgba(186,117,23,0.2); }
+  .coral-tag { background: rgba(216,90,48,0.15); color: var(--coral-mid); border: 1px solid rgba(216,90,48,0.2); }
+  .blue-tag { background: rgba(55,138,221,0.15); color: var(--blue-mid); border: 1px solid rgba(55,138,221,0.2); }
+  .gray-tag { background: rgba(255,255,255,0.06); color: #888; border: 1px solid rgba(255,255,255,0.1); }
+
+  /* Flow diagram */
+  .flow-container { background: #161614; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); padding: 2rem; overflow-x: auto; }
+  .flow-row { display: flex; align-items: flex-start; gap: 0; margin-bottom: 1rem; }
+  .flow-row:last-child { margin-bottom: 0; }
+  .fnode {
+    background: #1e1e1b;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 12px;
+    min-width: 130px;
+    flex-shrink: 0;
+  }
+  .fnode-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px; }
+  .fnode-name { font-weight: 600; color: #f0f0e8; font-size: 13px; }
+  .fnode-sub { font-size: 11px; color: #666; margin-top: 2px; }
+  .farrow { display: flex; align-items: center; padding: 0 8px; color: #444; font-size: 16px; align-self: center; }
+  .farrow-down { display: flex; justify-content: center; color: #444; font-size: 16px; padding: 4px 0; width: 130px; flex-shrink: 0; }
+
+  /* Code block */
+  .code-block {
+    background: #0a0a08;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 1.5rem;
+    font-family: var(--font-body);
+    font-size: 12.5px;
+    line-height: 1.8;
+    overflow-x: auto;
+  }
+  .code-block .comment { color: #555; }
+  .code-block .keyword { color: var(--purple-mid); }
+  .code-block .string { color: var(--teal-mid); }
+  .code-block .func { color: var(--blue-mid); }
+  .code-block .cls { color: var(--amber-mid); }
+  .code-block .num { color: var(--coral-mid); }
+  .code-file { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: #555; margin-bottom: 12px; font-family: var(--font-body); }
+
+  /* DB schema */
+  .schema-table {
+    background: #161614;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+  }
+  .schema-header {
+    padding: 10px 16px;
+    background: rgba(255,255,255,0.04);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .schema-tablename { font-family: var(--font-body); font-size: 13px; font-weight: 600; color: var(--amber-mid); }
+  .schema-desc { font-size: 11px; color: #555; }
+  .schema-row { display: grid; grid-template-columns: 160px 120px 1fr; gap: 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .schema-row:last-child { border-bottom: none; }
+  .schema-col { padding: 8px 16px; font-family: var(--font-body); font-size: 12px; }
+  .schema-col.field { color: #e8e8e0; }
+  .schema-col.type { color: var(--blue-mid); }
+  .schema-col.note { color: #555; }
+
+  /* State machine */
+  .state-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  .state-card {
+    background: #161614;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 1.25rem;
+  }
+  .state-name { font-family: var(--font-body); font-size: 13px; font-weight: 600; color: var(--purple-mid); margin-bottom: 6px; }
+  .state-desc { font-size: 12px; color: #666; margin-bottom: 10px; line-height: 1.5; }
+  .state-transitions { }
+  .state-t { font-size: 11px; padding: 4px 0; border-top: 1px solid rgba(255,255,255,0.05); color: #888; font-family: var(--font-body); }
+  .state-t span { color: var(--teal-mid); }
+
+  /* Hosting comparison */
+  .hosting-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+  .hosting-card { background: #161614; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 1.25rem; }
+  .hosting-card.recommended { border-color: var(--teal-mid); border-width: 1.5px; }
+  .hosting-name { font-size: 15px; font-weight: 600; color: #f0f0e8; margin-bottom: 4px; }
+  .hosting-rec { display: inline-block; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--teal-mid); background: rgba(29,158,117,0.15); padding: 2px 8px; border-radius: 10px; margin-bottom: 8px; }
+  .hosting-price { font-family: var(--font-body); font-size: 13px; color: var(--amber-mid); margin-bottom: 10px; }
+  .hosting-pro { font-size: 12px; color: #888; padding: 3px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .hosting-pro:last-child { border-bottom: none; }
+  .hosting-pro.good::before { content: '+ '; color: var(--teal-mid); }
+  .hosting-pro.bad::before { content: '- '; color: var(--coral-mid); }
+
+  /* Timeline */
+  .tl { position: relative; padding-left: 1.5rem; }
+  .tl::before { content: ''; position: absolute; left: 0; top: 6px; bottom: 6px; width: 1px; background: rgba(255,255,255,0.1); }
+  .tl-item { position: relative; padding: 0 0 2rem 1.5rem; }
+  .tl-dot { position: absolute; left: -5px; top: 5px; width: 10px; height: 10px; border-radius: 50%; }
+  .tl-day { font-family: var(--font-body); font-size: 10px; color: #555; margin-bottom: 6px; font-weight: 600; letter-spacing: 0.08em; }
+  .tl-tasks { display: flex; flex-direction: column; gap: 5px; }
+  .tl-task { font-size: 12.5px; color: #aaa; padding: 6px 12px; background: #161614; border-radius: 6px; border: 1px solid rgba(255,255,255,0.06); border-left-width: 2px; }
+
+  /* Divider */
+  hr { border: none; border-top: 1px solid rgba(255,255,255,0.06); margin: 3rem 0; }
+
+  /* Pill */
+  .pill { display: inline-block; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; padding: 3px 10px; border-radius: 20px; }
+
+  /* Info box */
+  .info-box { padding: 14px 16px; border-radius: 8px; font-size: 13px; line-height: 1.6; margin-bottom: 1rem; }
+  .info-teal { background: rgba(29,158,117,0.1); border: 1px solid rgba(29,158,117,0.2); color: #5dcaa5; }
+  .info-amber { background: rgba(186,117,23,0.1); border: 1px solid rgba(186,117,23,0.2); color: var(--amber-mid); }
+  .info-coral { background: rgba(216,90,48,0.1); border: 1px solid rgba(216,90,48,0.2); color: var(--coral-mid); }
+  .info-purple { background: rgba(127,119,221,0.1); border: 1px solid rgba(127,119,221,0.2); color: var(--purple-mid); }
+
+  @media (max-width: 768px) {
+    .arch-row-3, .arch-row-4, .arch-row-5 { grid-template-columns: 1fr; }
+    .arch-row-2 { grid-template-columns: 1fr; }
+    .state-grid, .hosting-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <div class="header-badge">Technical Architecture</div>
+    <h1>Pakka Quote — System Design</h1>
+    <p>Full architecture for the MVP: ingestion, parsing, approval flow, PDF generation, follow-ups, and onboarding. Python / FastAPI / PostgreSQL / Redis stack.</p>
+  </div>
+
+  <!-- 1. System overview -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <span class="section-title">System overview</span>
+    </div>
+
+    <div class="arch">
+      <div class="arch-row arch-row-3">
+        <div class="arch-cell teal-cell">
+          <div class="cell-label">Channel — inbound</div>
+          <div class="cell-name">WhatsApp</div>
+          <div class="cell-sub">Owner forwards inquiries to Pakka Quote number. Webhook fires on every message.</div>
+          <div style="margin-top:10px;">
+            <span class="cell-tag teal-tag">360dialog BSP</span>
+            <span class="cell-tag teal-tag">Innovatily account</span>
+          </div>
+        </div>
+        <div class="arch-cell teal-cell">
+          <div class="cell-label">Channel — inbound</div>
+          <div class="cell-name">Email</div>
+          <div class="cell-sub">Inquiries arriving via email. Polled every 2 min or pushed via Gmail webhook.</div>
+          <div style="margin-top:10px;">
+            <span class="cell-tag teal-tag">Gmail API</span>
+            <span class="cell-tag teal-tag">IMAP fallback</span>
+          </div>
+        </div>
+        <div class="arch-cell gray-cell">
+          <div class="cell-label">Channel — outbound</div>
+          <div class="cell-name">Email delivery</div>
+          <div class="cell-sub">Proposals and follow-ups sent to buyers. WhatsApp used only for owner interaction.</div>
+          <div style="margin-top:10px;">
+            <span class="cell-tag gray-tag">SendGrid / SES</span>
+            <span class="cell-tag gray-tag">SMTP</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="arch-row arch-row-3">
+        <div class="arch-cell purple-cell span3">
+          <div class="cell-label">Core application — FastAPI</div>
+          <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:rgba(255,255,255,0.06);margin-top:10px;border-radius:6px;overflow:hidden;">
+            <div style="background:#1a1a17;padding:10px 12px;">
+              <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--purple-mid);margin-bottom:4px;">Webhook</div>
+              <div style="font-size:12px;color:#ccc;">WA + email ingestion router</div>
+            </div>
+            <div style="background:#1a1a17;padding:10px 12px;">
+              <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--purple-mid);margin-bottom:4px;">Parser</div>
+              <div style="font-size:12px;color:#ccc;">Claude API, Whisper, Vision</div>
+            </div>
+            <div style="background:#1a1a17;padding:10px 12px;">
+              <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--purple-mid);margin-bottom:4px;">State machine</div>
+              <div style="font-size:12px;color:#ccc;">Conversation flow manager</div>
+            </div>
+            <div style="background:#1a1a17;padding:10px 12px;">
+              <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--purple-mid);margin-bottom:4px;">PDF engine</div>
+              <div style="font-size:12px;color:#ccc;">WeasyPrint proposal generator</div>
+            </div>
+            <div style="background:#1a1a17;padding:10px 12px;">
+              <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--purple-mid);margin-bottom:4px;">Scheduler</div>
+              <div style="font-size:12px;color:#ccc;">Celery beat follow-up jobs</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arch-row arch-row-4">
+        <div class="arch-cell blue-cell">
+          <div class="cell-label">Database</div>
+          <div class="cell-name">PostgreSQL</div>
+          <div class="cell-sub">Businesses, inquiries, proposals, conversations, follow-up jobs</div>
+          <div style="margin-top:8px;"><span class="cell-tag blue-tag">Supabase / Railway</span></div>
+        </div>
+        <div class="arch-cell blue-cell">
+          <div class="cell-label">Queue + cache</div>
+          <div class="cell-name">Redis</div>
+          <div class="cell-sub">Conversation state cache. Celery broker. Rate limiting per business.</div>
+          <div style="margin-top:8px;"><span class="cell-tag blue-tag">Upstash Redis</span></div>
+        </div>
+        <div class="arch-cell amber-cell">
+          <div class="cell-label">File storage</div>
+          <div class="cell-name">Object store</div>
+          <div class="cell-sub">Generated PDFs, uploaded logos, voice note transcription queue</div>
+          <div style="margin-top:8px;"><span class="cell-tag amber-tag">Cloudflare R2</span></div>
+        </div>
+        <div class="arch-cell coral-cell">
+          <div class="cell-label">AI services</div>
+          <div class="cell-name">Claude + Whisper</div>
+          <div class="cell-sub">Claude API for parsing + generation. Whisper for voice-to-text only.</div>
+          <div style="margin-top:8px;"><span class="cell-tag coral-tag">Anthropic API</span><span class="cell-tag coral-tag">OpenAI Whisper</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Request flow -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <span class="section-title">Request flow — inquiry to proposal</span>
+    </div>
+
+    <div class="flow-container">
+      <div style="display:flex;gap:8px;align-items:flex-start;overflow-x:auto;padding-bottom:8px;">
+
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+          <div class="fnode" style="border-color:rgba(29,158,117,0.3);">
+            <div class="fnode-label" style="color:var(--teal-mid);">1 — Inbound</div>
+            <div class="fnode-name">WA Webhook</div>
+            <div class="fnode-sub">POST /webhook/whatsapp</div>
+          </div>
+        </div>
+
+        <div class="farrow" style="align-self:center;">→</div>
+
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+          <div class="fnode" style="border-color:rgba(29,158,117,0.3);">
+            <div class="fnode-label" style="color:var(--teal-mid);">2 — Identify</div>
+            <div class="fnode-name">Route by phone</div>
+            <div class="fnode-sub">Lookup business_id</div>
+          </div>
+        </div>
+
+        <div class="farrow" style="align-self:center;">→</div>
+
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+          <div class="fnode" style="border-color:rgba(29,158,117,0.3);">
+            <div class="fnode-label" style="color:var(--teal-mid);">3 — State</div>
+            <div class="fnode-name">Check conv state</div>
+            <div class="fnode-sub">Redis: AWAITING_PRICE?</div>
+          </div>
+        </div>
+
+        <div class="farrow" style="align-self:center;">→</div>
+
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div class="fnode" style="border-color:rgba(127,119,221,0.3);">
+            <div class="fnode-label" style="color:var(--purple-mid);">4a — New inquiry</div>
+            <div class="fnode-name">Parse inquiry</div>
+            <div class="fnode-sub">Claude API → structured JSON</div>
+          </div>
+          <div class="fnode" style="border-color:rgba(127,119,221,0.3);">
+            <div class="fnode-label" style="color:var(--purple-mid);">4b — Price reply</div>
+            <div class="fnode-name">Extract price</div>
+            <div class="fnode-sub">Regex + validate float</div>
+          </div>
+        </div>
+
+        <div class="farrow" style="align-self:center;">→</div>
+
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div class="fnode" style="border-color:rgba(186,117,23,0.3);">
+            <div class="fnode-label" style="color:var(--amber-mid);">5a — Summary</div>
+            <div class="fnode-name">Send to owner</div>
+            <div class="fnode-sub">WA message + await price</div>
+          </div>
+          <div class="fnode" style="border-color:rgba(186,117,23,0.3);">
+            <div class="fnode-label" style="color:var(--amber-mid);">5b — Draft</div>
+            <div class="fnode-name">Generate draft</div>
+            <div class="fnode-sub">Build proposal preview</div>
+          </div>
+        </div>
+
+        <div class="farrow" style="align-self:center;">→</div>
+
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div class="fnode" style="border-color:rgba(216,90,48,0.3);">
+            <div class="fnode-label" style="color:var(--coral-mid);">6 — Approve</div>
+            <div class="fnode-name">SEND / EDIT / SKIP</div>
+            <div class="fnode-sub">Owner reply → action</div>
+          </div>
+        </div>
+
+        <div class="farrow" style="align-self:center;">→</div>
+
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div class="fnode" style="border-color:rgba(55,138,221,0.3);">
+            <div class="fnode-label" style="color:var(--blue-mid);">7 — Deliver</div>
+            <div class="fnode-name">Generate PDF</div>
+            <div class="fnode-sub">WeasyPrint → R2 → email</div>
+          </div>
+          <div class="fnode" style="border-color:rgba(55,138,221,0.3);">
+            <div class="fnode-label" style="color:var(--blue-mid);">8 — Schedule</div>
+            <div class="fnode-name">Queue follow-ups</div>
+            <div class="fnode-sub">Celery: day 2, 5, 10</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="info-box info-teal" style="margin-top:1rem;">
+      The entire flow is async. Webhook returns 200 immediately. All processing happens in background Celery tasks. This prevents 360dialog from retrying on timeouts.
+    </div>
+  </div>
+
+  <!-- 3. Project structure -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <span class="section-title">Project structure</span>
+    </div>
+
+    <div class="code-block">
+<span class="comment"># pakka_quote/</span>
+├── <span class="cls">app/</span>
+│   ├── <span class="func">main.py</span>                 <span class="comment"># FastAPI app, routers registered here</span>
+│   ├── <span class="func">config.py</span>               <span class="comment"># Settings via pydantic-settings (env vars)</span>
+│   │
+│   ├── <span class="cls">api/</span>
+│   │   ├── <span class="func">webhook_whatsapp.py</span>  <span class="comment"># POST /webhook/whatsapp — 360dialog events</span>
+│   │   ├── <span class="func">webhook_email.py</span>     <span class="comment"># POST /webhook/email — Gmail push or poll</span>
+│   │   └── <span class="func">health.py</span>           <span class="comment"># GET /health — uptime check</span>
+│   │
+│   ├── <span class="cls">services/</span>
+│   │   ├── <span class="func">router.py</span>           <span class="comment"># Identifies business from phone/email</span>
+│   │   ├── <span class="func">conversation.py</span>     <span class="comment"># State machine — reads/writes Redis state</span>
+│   │   ├── <span class="func">parser.py</span>           <span class="comment"># Claude API — extracts inquiry fields</span>
+│   │   ├── <span class="func">transcriber.py</span>      <span class="comment"># Whisper — voice note → text</span>
+│   │   ├── <span class="func">proposal.py</span>         <span class="comment"># Builds proposal data object</span>
+│   │   ├── <span class="func">pdf_generator.py</span>    <span class="comment"># WeasyPrint → PDF bytes → R2 upload</span>
+│   │   ├── <span class="func">whatsapp.py</span>         <span class="comment"># 360dialog send message wrapper</span>
+│   │   └── <span class="func">email_sender.py</span>     <span class="comment"># SendGrid/SMTP send wrapper</span>
+│   │
+│   ├── <span class="cls">tasks/</span>
+│   │   ├── <span class="func">celery_app.py</span>       <span class="comment"># Celery + Redis broker config</span>
+│   │   ├── <span class="func">parse_inquiry.py</span>    <span class="comment"># Async task: parse + notify owner</span>
+│   │   ├── <span class="func">generate_pdf.py</span>     <span class="comment"># Async task: generate + send proposal</span>
+│   │   └── <span class="func">follow_up.py</span>        <span class="comment"># Scheduled tasks: day 2, 5, 10 emails</span>
+│   │
+│   ├── <span class="cls">models/</span>
+│   │   ├── <span class="func">business.py</span>         <span class="comment"># Business, CatalogItem, PaymentTerms</span>
+│   │   ├── <span class="func">inquiry.py</span>          <span class="comment"># Inquiry, ParsedInquiry</span>
+│   │   ├── <span class="func">proposal.py</span>         <span class="comment"># Proposal, ProposalLineItem</span>
+│   │   └── <span class="func">follow_up.py</span>        <span class="comment"># FollowUpJob</span>
+│   │
+│   └── <span class="cls">db/</span>
+│       ├── <span class="func">database.py</span>         <span class="comment"># SQLAlchemy async engine</span>
+│       └── <span class="func">migrations/</span>         <span class="comment"># Alembic migrations</span>
+│
+├── <span class="cls">templates/</span>
+│   └── <span class="func">proposal.html</span>           <span class="comment"># Jinja2 template → WeasyPrint renders to PDF</span>
+│
+├── <span class="func">pyproject.toml</span>
+└── <span class="func">.env.example</span>
+    </div>
+  </div>
+
+  <!-- 4. Database schema -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <span class="section-title">Database schema</span>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+
+      <div>
+        <div class="schema-table">
+          <div class="schema-header">
+            <div class="schema-tablename">businesses</div>
+            <div class="schema-desc">One row per SMB customer</div>
+          </div>
+          <div class="schema-row"><div class="schema-col field">id</div><div class="schema-col type">uuid PK</div><div class="schema-col note">auto-generated</div></div>
+          <div class="schema-row"><div class="schema-col field">name</div><div class="schema-col type">text</div><div class="schema-col note">e.g. Sharma Steel</div></div>
+          <div class="schema-row"><div class="schema-col field">owner_phone</div><div class="schema-col type">text</div><div class="schema-col note">WA routing key</div></div>
+          <div class="schema-row"><div class="schema-col field">owner_email</div><div class="schema-col type">text</div><div class="schema-col note">proposal sender</div></div>
+          <div class="schema-row"><div class="schema-col field">gst_number</div><div class="schema-col type">text</div><div class="schema-col note">on PDF</div></div>
+          <div class="schema-row"><div class="schema-col field">logo_url</div><div class="schema-col type">text</div><div class="schema-col note">R2 object URL</div></div>
+          <div class="schema-row"><div class="schema-col field">payment_terms</div><div class="schema-col type">jsonb</div><div class="schema-col note">default terms map</div></div>
+          <div class="schema-row"><div class="schema-col field">proposal_counter</div><div class="schema-col type">int</div><div class="schema-col note">for SST-2026-047</div></div>
+          <div class="schema-row"><div class="schema-col field">onboarded_at</div><div class="schema-col type">timestamptz</div><div class="schema-col note"></div></div>
+          <div class="schema-row"><div class="schema-col field">plan</div><div class="schema-col type">text</div><div class="schema-col note">starter/growth/unlimited</div></div>
+        </div>
+
+        <div class="schema-table">
+          <div class="schema-header">
+            <div class="schema-tablename">catalog_items</div>
+            <div class="schema-desc">Products per business</div>
+          </div>
+          <div class="schema-row"><div class="schema-col field">id</div><div class="schema-col type">uuid PK</div><div class="schema-col note"></div></div>
+          <div class="schema-row"><div class="schema-col field">business_id</div><div class="schema-col type">uuid FK</div><div class="schema-col note">→ businesses</div></div>
+          <div class="schema-row"><div class="schema-col field">name</div><div class="schema-col type">text</div><div class="schema-col note">e.g. TMT Bars Fe500</div></div>
+          <div class="schema-row"><div class="schema-col field">aliases</div><div class="schema-col type">text[]</div><div class="schema-col note">for fuzzy matching</div></div>
+          <div class="schema-row"><div class="schema-col field">unit</div><div class="schema-col type">text</div><div class="schema-col note">kg, MT, piece</div></div>
+          <div class="schema-row"><div class="schema-col field">spec_template</div><div class="schema-col type">jsonb</div><div class="schema-col note">grade, size, etc.</div></div>
+          <div class="schema-row"><div class="schema-col field">gst_rate</div><div class="schema-col type">numeric</div><div class="schema-col note">18.0</div></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="schema-table">
+          <div class="schema-header">
+            <div class="schema-tablename">inquiries</div>
+            <div class="schema-desc">Every incoming inquiry</div>
+          </div>
+          <div class="schema-row"><div class="schema-col field">id</div><div class="schema-col type">uuid PK</div><div class="schema-col note"></div></div>
+          <div class="schema-row"><div class="schema-col field">business_id</div><div class="schema-col type">uuid FK</div><div class="schema-col note"></div></div>
+          <div class="schema-row"><div class="schema-col field">source</div><div class="schema-col type">text</div><div class="schema-col note">whatsapp / email</div></div>
+          <div class="schema-row"><div class="schema-col field">raw_content</div><div class="schema-col type">text</div><div class="schema-col note">original message</div></div>
+          <div class="schema-row"><div class="schema-col field">buyer_phone</div><div class="schema-col type">text</div><div class="schema-col note">nullable</div></div>
+          <div class="schema-row"><div class="schema-col field">buyer_email</div><div class="schema-col type">text</div><div class="schema-col note">nullable</div></div>
+          <div class="schema-row"><div class="schema-col field">parsed_data</div><div class="schema-col type">jsonb</div><div class="schema-col note">product, qty, specs…</div></div>
+          <div class="schema-row"><div class="schema-col field">status</div><div class="schema-col type">text</div><div class="schema-col note">parsing/awaiting_price/ sent/skipped</div></div>
+          <div class="schema-row"><div class="schema-col field">received_at</div><div class="schema-col type">timestamptz</div><div class="schema-col note"></div></div>
+        </div>
+
+        <div class="schema-table">
+          <div class="schema-header">
+            <div class="schema-tablename">proposals</div>
+            <div class="schema-desc">Sent proposals</div>
+          </div>
+          <div class="schema-row"><div class="schema-col field">id</div><div class="schema-col type">uuid PK</div><div class="schema-col note"></div></div>
+          <div class="schema-row"><div class="schema-col field">inquiry_id</div><div class="schema-col type">uuid FK</div><div class="schema-col note"></div></div>
+          <div class="schema-row"><div class="schema-col field">proposal_number</div><div class="schema-col type">text</div><div class="schema-col note">SST-2026-047</div></div>
+          <div class="schema-row"><div class="schema-col field">line_items</div><div class="schema-col type">jsonb</div><div class="schema-col note">product, qty, rate, total</div></div>
+          <div class="schema-row"><div class="schema-col field">total_amount</div><div class="schema-col type">numeric</div><div class="schema-col note">excl. GST</div></div>
+          <div class="schema-row"><div class="schema-col field">gst_amount</div><div class="schema-col type">numeric</div><div class="schema-col note"></div></div>
+          <div class="schema-row"><div class="schema-col field">pdf_url</div><div class="schema-col type">text</div><div class="schema-col note">R2 signed URL</div></div>
+          <div class="schema-row"><div class="schema-col field">sent_at</div><div class="schema-col type">timestamptz</div><div class="schema-col note"></div></div>
+          <div class="schema-row"><div class="schema-col field">valid_until</div><div class="schema-col type">timestamptz</div><div class="schema-col note">48hr default</div></div>
+        </div>
+
+        <div class="schema-table">
+          <div class="schema-header">
+            <div class="schema-tablename">follow_up_jobs</div>
+            <div class="schema-desc">Scheduled follow-ups</div>
+          </div>
+          <div class="schema-row"><div class="schema-col field">id</div><div class="schema-col type">uuid PK</div><div class="schema-col note"></div></div>
+          <div class="schema-row"><div class="schema-col field">proposal_id</div><div class="schema-col type">uuid FK</div><div class="schema-col note"></div></div>
+          <div class="schema-row"><div class="schema-col field">send_at</div><div class="schema-col type">timestamptz</div><div class="schema-col note">day 2, 5, 10</div></div>
+          <div class="schema-row"><div class="schema-col field">status</div><div class="schema-col type">text</div><div class="schema-col note">pending/sent/cancelled</div></div>
+          <div class="schema-row"><div class="schema-col field">celery_task_id</div><div class="schema-col type">text</div><div class="schema-col note">for cancellation</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 5. Conversation state machine -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <span class="section-title">WhatsApp conversation state machine</span>
+    </div>
+
+    <div class="info-box info-purple" style="margin-bottom:1.5rem;">
+      State is stored in Redis as a hash keyed by <code style="font-family:var(--font-body);">conv:{owner_phone}</code>. Expires after 4 hours of inactivity. Every incoming message first reads state, then decides how to handle the message.
+    </div>
+
+    <div class="state-grid">
+      <div class="state-card">
+        <div class="state-name">IDLE</div>
+        <div class="state-desc">No active conversation. Waiting for a new inquiry to be forwarded.</div>
+        <div class="state-transitions">
+          <div class="state-t">message received → <span>PARSING</span></div>
+          <div class="state-t">onboarding trigger → <span>ONBOARDING</span></div>
+        </div>
+      </div>
+      <div class="state-card">
+        <div class="state-name">ONBOARDING</div>
+        <div class="state-desc">First-time setup. Collecting business name, GST, catalog, payment terms. Step tracked in state.</div>
+        <div class="state-transitions">
+          <div class="state-t">step complete → <span>ONBOARDING (next step)</span></div>
+          <div class="state-t">all steps done → <span>IDLE</span></div>
+        </div>
+      </div>
+      <div class="state-card">
+        <div class="state-name">PARSING</div>
+        <div class="state-desc">Inquiry received, Claude is parsing it. Owner gets a "processing" acknowledgment. Short-lived.</div>
+        <div class="state-transitions">
+          <div class="state-t">parse success → <span>AWAITING_PRICE</span></div>
+          <div class="state-t">parse failed → <span>AWAITING_CLARIFICATION</span></div>
+        </div>
+      </div>
+      <div class="state-card">
+        <div class="state-name">AWAITING_PRICE</div>
+        <div class="state-desc">Summary sent to owner. Waiting for them to reply with a price. inquiry_id stored in state.</div>
+        <div class="state-transitions">
+          <div class="state-t">valid price reply → <span>AWAITING_APPROVAL</span></div>
+          <div class="state-t">"skip" → <span>IDLE</span></div>
+          <div class="state-t">4hr timeout → <span>IDLE (flagged)</span></div>
+        </div>
+      </div>
+      <div class="state-card">
+        <div class="state-name">AWAITING_CLARIFICATION</div>
+        <div class="state-desc">Parser couldn't extract a field with confidence. One clarifying question sent to owner.</div>
+        <div class="state-transitions">
+          <div class="state-t">owner replies → <span>PARSING (retry)</span></div>
+          <div class="state-t">"skip" → <span>IDLE</span></div>
+        </div>
+      </div>
+      <div class="state-card">
+        <div class="state-name">AWAITING_APPROVAL</div>
+        <div class="state-desc">Draft proposal shown to owner. Waiting for SEND, EDIT, or SKIP command.</div>
+        <div class="state-transitions">
+          <div class="state-t">"SEND" → <span>IDLE (PDF sent)</span></div>
+          <div class="state-t">"EDIT" → <span>AWAITING_PRICE</span></div>
+          <div class="state-t">"SKIP" → <span>IDLE</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="code-block" style="margin-top:1.5rem;">
+<span class="comment"># services/conversation.py — state read/write</span>
+
+<span class="keyword">import</span> json
+<span class="keyword">from</span> app.db.redis <span class="keyword">import</span> redis_client
+
+STATE_TTL = <span class="num">4</span> * <span class="num">60</span> * <span class="num">60</span>  <span class="comment"># 4 hours</span>
+
+<span class="keyword">async def</span> <span class="func">get_state</span>(owner_phone: str) -> dict:
+    raw = <span class="keyword">await</span> redis_client.get(f<span class="string">"conv:{owner_phone}"</span>)
+    <span class="keyword">return</span> json.loads(raw) <span class="keyword">if</span> raw <span class="keyword">else</span> {<span class="string">"state"</span>: <span class="string">"IDLE"</span>}
+
+<span class="keyword">async def</span> <span class="func">set_state</span>(owner_phone: str, data: dict):
+    <span class="keyword">await</span> redis_client.set(
+        f<span class="string">"conv:{owner_phone}"</span>,
+        json.dumps(data),
+        ex=STATE_TTL
+    )
+
+<span class="keyword">async def</span> <span class="func">clear_state</span>(owner_phone: str):
+    <span class="keyword">await</span> redis_client.delete(f<span class="string">"conv:{owner_phone}"</span>)
+
+<span class="comment"># Usage in webhook handler</span>
+<span class="keyword">async def</span> <span class="func">handle_whatsapp_message</span>(phone: str, message: str):
+    state = <span class="keyword">await</span> get_state(phone)
+
+    <span class="keyword">if</span> state[<span class="string">"state"</span>] == <span class="string">"AWAITING_PRICE"</span>:
+        <span class="keyword">await</span> handle_price_reply(phone, message, state)
+    <span class="keyword">elif</span> state[<span class="string">"state"</span>] == <span class="string">"AWAITING_APPROVAL"</span>:
+        <span class="keyword">await</span> handle_approval(phone, message, state)
+    <span class="keyword">else</span>:
+        <span class="comment"># New forwarded inquiry — enqueue parse task</span>
+        parse_inquiry.delay(phone, message)
+        <span class="keyword">await</span> set_state(phone, {<span class="string">"state"</span>: <span class="string">"PARSING"</span>})
+    </div>
+  </div>
+
+  <!-- 6. Parser -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">06</span>
+      <span class="section-title">Inquiry parser — Claude prompt design</span>
+    </div>
+
+    <div class="code-block">
+<span class="comment"># services/parser.py</span>
+
+SYSTEM_PROMPT = <span class="string">"""
+You are an inquiry parser for Indian B2B manufacturing businesses.
+Extract structured data from buyer inquiries. Inquiries may be in
+English, Hindi, Hinglish, or mixed. Be liberal in interpretation.
+
+Return ONLY valid JSON. No preamble. No explanation.
+
+Schema:
+{
+  "product_name": "string — normalized product name",
+  "quantity": "number — numeric value only",
+  "unit": "string — kg / MT / piece / roll / box / meter",
+  "specs": "object — grade, size, thickness, etc. as key-value",
+  "delivery_location": "string or null",
+  "delivery_deadline": "string or null — ISO date if determinable",
+  "urgency": "low | medium | high",
+  "buyer_name": "string or null",
+  "confidence": "number — 0.0 to 1.0",
+  "missing_fields": ["list of fields that could not be extracted"]
+}
+"""</span>
+
+<span class="keyword">async def</span> <span class="func">parse_inquiry</span>(raw_text: str, catalog: list[dict]) -> dict:
+    catalog_context = json.dumps(catalog, ensure_ascii=<span class="keyword">False</span>)
+
+    response = <span class="keyword">await</span> anthropic_client.messages.create(
+        model=<span class="string">"claude-sonnet-4-6"</span>,
+        max_tokens=<span class="num">1000</span>,
+        system=SYSTEM_PROMPT,
+        messages=[{
+            <span class="string">"role"</span>: <span class="string">"user"</span>,
+            <span class="string">"content"</span>: f<span class="string">"""
+Business catalog: {catalog_context}
+
+Inquiry to parse:
+{raw_text}
+"""</span>
+        }]
+    )
+
+    result = json.loads(response.content[<span class="num">0</span>].text)
+
+    <span class="comment"># If confidence below threshold, flag for clarification</span>
+    <span class="keyword">if</span> result[<span class="string">"confidence"</span>] < <span class="num">0.75</span> <span class="keyword">or</span> result[<span class="string">"missing_fields"</span>]:
+        result[<span class="string">"needs_clarification"</span>] = <span class="keyword">True</span>
+
+    <span class="keyword">return</span> result
+    </div>
+  </div>
+
+  <!-- 7. PDF generator -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">07</span>
+      <span class="section-title">PDF proposal generator</span>
+    </div>
+
+    <div class="code-block">
+<span class="comment"># services/pdf_generator.py</span>
+
+<span class="keyword">from</span> weasyprint <span class="keyword">import</span> HTML
+<span class="keyword">from</span> jinja2 <span class="keyword">import</span> Environment, FileSystemLoader
+<span class="keyword">import</span> boto3  <span class="comment"># for R2 via S3-compatible API</span>
+
+jinja_env = Environment(loader=FileSystemLoader(<span class="string">"templates/"</span>))
+
+<span class="keyword">async def</span> <span class="func">generate_proposal_pdf</span>(proposal: Proposal, business: Business) -> str:
+    <span class="comment"># 1. Render HTML from Jinja template</span>
+    template = jinja_env.get_template(<span class="string">"proposal.html"</span>)
+    html_content = template.render(
+        business=business,
+        proposal=proposal,
+        line_items=proposal.line_items,
+        total=proposal.total_amount,
+        gst=proposal.gst_amount,
+        grand_total=proposal.total_amount + proposal.gst_amount
+    )
+
+    <span class="comment"># 2. Convert to PDF bytes</span>
+    pdf_bytes = HTML(string=html_content).write_pdf()
+
+    <span class="comment"># 3. Upload to Cloudflare R2</span>
+    key = f<span class="string">"proposals/{business.id}/{proposal.proposal_number}.pdf"</span>
+    s3.put_object(
+        Bucket=settings.R2_BUCKET,
+        Key=key,
+        Body=pdf_bytes,
+        ContentType=<span class="string">"application/pdf"</span>
+    )
+
+    <span class="comment"># 4. Return public URL</span>
+    <span class="keyword">return</span> f<span class="string">"{settings.R2_PUBLIC_URL}/{key}"</span>
+    </div>
+  </div>
+
+  <!-- 8. Celery tasks -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">08</span>
+      <span class="section-title">Celery tasks — async + scheduled</span>
+    </div>
+
+    <div class="code-block">
+<span class="comment"># tasks/follow_up.py</span>
+
+<span class="keyword">from</span> celery <span class="keyword">import</span> shared_task
+<span class="keyword">from</span> datetime <span class="keyword">import</span> timedelta
+<span class="keyword">from</span> app.tasks.celery_app <span class="keyword">import</span> celery_app
+
+<span class="keyword">def</span> <span class="func">schedule_follow_ups</span>(proposal_id: str, sent_at: datetime):
+    <span class="comment"># Schedule 3 follow-up emails after proposal send</span>
+    delays = [<span class="num">2</span>, <span class="num">5</span>, <span class="num">10</span>]  <span class="comment"># days</span>
+
+    <span class="keyword">for</span> day <span class="keyword">in</span> delays:
+        eta = sent_at + timedelta(days=day)
+        task = send_follow_up_email.apply_async(
+            args=[proposal_id, day],
+            eta=eta
+        )
+        <span class="comment"># Store task ID for cancellation</span>
+        FollowUpJob.create(
+            proposal_id=proposal_id,
+            send_at=eta,
+            celery_task_id=task.id,
+            status=<span class="string">"pending"</span>
+        )
+
+<span class="cls">@celery_app</span>.task
+<span class="keyword">def</span> <span class="func">send_follow_up_email</span>(proposal_id: str, day: int):
+    proposal = Proposal.get(proposal_id)
+    job = FollowUpJob.get(proposal_id=proposal_id, day=day)
+
+    <span class="comment"># Check if cancelled (buyer replied)</span>
+    <span class="keyword">if</span> job.status == <span class="string">"cancelled"</span>:
+        <span class="keyword">return</span>
+
+    subject, body = build_followup_copy(proposal, day)
+    email_sender.send(
+        to=proposal.inquiry.buyer_email,
+        from_=proposal.business.owner_email,
+        subject=subject,
+        body=body,
+        reply_to=proposal.business.owner_email
+    )
+    job.update(status=<span class="string">"sent"</span>)
+
+<span class="keyword">def</span> <span class="func">cancel_follow_ups</span>(proposal_id: str):
+    <span class="comment"># Called when buyer replies to any email</span>
+    jobs = FollowUpJob.get_pending(proposal_id)
+    <span class="keyword">for</span> job <span class="keyword">in</span> jobs:
+        celery_app.control.revoke(job.celery_task_id)
+        job.update(status=<span class="string">"cancelled"</span>)
+    </div>
+  </div>
+
+  <!-- 9. Hosting -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">09</span>
+      <span class="section-title">Hosting recommendation</span>
+    </div>
+
+    <div class="hosting-grid">
+      <div class="hosting-card recommended">
+        <div class="hosting-rec">Recommended for MVP</div>
+        <div class="hosting-name">Railway</div>
+        <div class="hosting-price">~$20–40/mo</div>
+        <div class="hosting-pro good">Deploy from GitHub in minutes</div>
+        <div class="hosting-pro good">FastAPI + Celery worker as separate services</div>
+        <div class="hosting-pro good">Managed PostgreSQL + Redis built in</div>
+        <div class="hosting-pro good">Automatic SSL, no Nginx config</div>
+        <div class="hosting-pro good">Zero DevOps to start</div>
+        <div class="hosting-pro bad">Pricier at scale vs AWS</div>
+        <div class="hosting-pro bad">Less control over infra</div>
+      </div>
+      <div class="hosting-card">
+        <div class="hosting-name">Render</div>
+        <div class="hosting-price">~$25–50/mo</div>
+        <div class="hosting-pro good">Similar to Railway, slightly more mature</div>
+        <div class="hosting-pro good">Background workers supported</div>
+        <div class="hosting-pro good">Good free tier for early testing</div>
+        <div class="hosting-pro bad">Celery worker setup slightly more manual</div>
+        <div class="hosting-pro bad">Cold starts on free tier</div>
+      </div>
+      <div class="hosting-card">
+        <div class="hosting-name">AWS (EC2 / ECS)</div>
+        <div class="hosting-price">~$30–80/mo</div>
+        <div class="hosting-pro good">Full control, cheapest at scale</div>
+        <div class="hosting-pro good">RDS PostgreSQL + ElastiCache Redis</div>
+        <div class="hosting-pro bad">Significant setup time (VPC, SGs, IAM)</div>
+        <div class="hosting-pro bad">Wrong tradeoff for 10-day MVP</div>
+        <div class="hosting-pro bad">Save this for post-product-market-fit</div>
+      </div>
+    </div>
+
+    <div class="info-box info-amber" style="margin-top:1rem;">
+      Use Railway for MVP. Add Cloudflare in front for webhook reliability and DDoS protection — 360dialog will retry webhooks on any non-200 response, so your endpoint must be fast and stable. Cloudflare's free tier handles this.
+    </div>
+  </div>
+
+  <!-- 10. Environment variables -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">10</span>
+      <span class="section-title">Environment variables</span>
+    </div>
+
+    <div class="code-block">
+<span class="comment"># .env.example — all required secrets</span>
+
+<span class="comment"># App</span>
+<span class="cls">APP_ENV</span>=production
+<span class="cls">SECRET_KEY</span>=your-secret-key-here
+
+<span class="comment"># Database</span>
+<span class="cls">DATABASE_URL</span>=postgresql+asyncpg://user:pass@host:5432/pakkaquote
+
+<span class="comment"># Redis (Celery broker + state cache)</span>
+<span class="cls">REDIS_URL</span>=redis://default:pass@host:6379
+
+<span class="comment"># 360dialog — WhatsApp Business API</span>
+<span class="cls">DIALOG360_API_KEY</span>=your-360dialog-key
+<span class="cls">DIALOG360_WEBHOOK_SECRET</span>=for-signature-verification
+<span class="cls">WHATSAPP_PHONE_NUMBER_ID</span>=innovatily-number-id
+
+<span class="comment"># Claude API</span>
+<span class="cls">ANTHROPIC_API_KEY</span>=sk-ant-...
+
+<span class="comment"># OpenAI (Whisper only)</span>
+<span class="cls">OPENAI_API_KEY</span>=sk-...
+
+<span class="comment"># Gmail API</span>
+<span class="cls">GMAIL_CREDENTIALS_JSON</span>=base64-encoded-credentials
+<span class="cls">GMAIL_POLL_INTERVAL_SECONDS</span>=120
+
+<span class="comment"># Email delivery</span>
+<span class="cls">SENDGRID_API_KEY</span>=SG...
+<span class="cls">SENDGRID_FROM_EMAIL</span>=proposals@pakkaquote.com
+
+<span class="comment"># Cloudflare R2 (PDF storage)</span>
+<span class="cls">R2_ACCOUNT_ID</span>=...
+<span class="cls">R2_ACCESS_KEY_ID</span>=...
+<span class="cls">R2_SECRET_ACCESS_KEY</span>=...
+<span class="cls">R2_BUCKET</span>=pakka-proposals
+<span class="cls">R2_PUBLIC_URL</span>=https://proposals.pakkaquote.com
+    </div>
+  </div>
+
+  <!-- 11. Build order -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">11</span>
+      <span class="section-title">Recommended build order</span>
+    </div>
+
+    <div class="info-box info-teal" style="margin-bottom:1.5rem;">
+      Build in dependency order. Each day produces something testable. Never build two things at once that depend on each other.
+    </div>
+
+    <div class="tl">
+      <div class="tl-item">
+        <div class="tl-dot" style="background:var(--teal-mid);"></div>
+        <div class="tl-day">Day 1 — Foundation</div>
+        <div class="tl-tasks">
+          <div class="tl-task" style="border-left-color:var(--teal-mid);">FastAPI app skeleton + config.py with pydantic-settings</div>
+          <div class="tl-task" style="border-left-color:var(--teal-mid);">PostgreSQL connection + SQLAlchemy models + first Alembic migration</div>
+          <div class="tl-task" style="border-left-color:var(--teal-mid);">Redis connection + basic get/set helpers</div>
+          <div class="tl-task" style="border-left-color:var(--teal-mid);">Deploy skeleton to Railway — confirm /health returns 200</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:var(--teal-mid);"></div>
+        <div class="tl-day">Day 2 — Channels</div>
+        <div class="tl-tasks">
+          <div class="tl-task" style="border-left-color:var(--teal-mid);">360dialog webhook endpoint — verify signature, echo bot response</div>
+          <div class="tl-task" style="border-left-color:var(--teal-mid);">Phone-number-to-business routing</div>
+          <div class="tl-task" style="border-left-color:var(--teal-mid);">Gmail API polling task — store raw emails in DB</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:var(--purple-mid);"></div>
+        <div class="tl-day">Day 3 — Parser</div>
+        <div class="tl-tasks">
+          <div class="tl-task" style="border-left-color:var(--purple-mid);">Claude inquiry parser with structured JSON output</div>
+          <div class="tl-task" style="border-left-color:var(--purple-mid);">Test against 20 real samples from manual sprint</div>
+          <div class="tl-task" style="border-left-color:var(--purple-mid);">Whisper voice-to-text for audio messages</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:var(--purple-mid);"></div>
+        <div class="tl-day">Day 4 — State machine</div>
+        <div class="tl-tasks">
+          <div class="tl-task" style="border-left-color:var(--purple-mid);">Redis conversation state — all 6 states wired up</div>
+          <div class="tl-task" style="border-left-color:var(--purple-mid);">Celery task queue — parse_inquiry task running async</div>
+          <div class="tl-task" style="border-left-color:var(--purple-mid);">Owner summary WhatsApp message sent after parse</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:var(--amber-mid);"></div>
+        <div class="tl-day">Day 5 — Onboarding flow</div>
+        <div class="tl-tasks">
+          <div class="tl-task" style="border-left-color:var(--amber-mid);">ONBOARDING state — step-by-step WhatsApp conversation</div>
+          <div class="tl-task" style="border-left-color:var(--amber-mid);">Business + catalog_items written to DB from conversation</div>
+          <div class="tl-task" style="border-left-color:var(--amber-mid);">Logo upload flow via WhatsApp image → R2</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:var(--amber-mid);"></div>
+        <div class="tl-day">Day 6 — Price + approval flow</div>
+        <div class="tl-tasks">
+          <div class="tl-task" style="border-left-color:var(--amber-mid);">Price reply handling — AWAITING_PRICE → AWAITING_APPROVAL</div>
+          <div class="tl-task" style="border-left-color:var(--amber-mid);">Draft proposal preview message to owner</div>
+          <div class="tl-task" style="border-left-color:var(--amber-mid);">SEND / EDIT / SKIP command handling</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:var(--coral-mid);"></div>
+        <div class="tl-day">Day 7 — PDF generator</div>
+        <div class="tl-tasks">
+          <div class="tl-task" style="border-left-color:var(--coral-mid);">proposal.html Jinja2 template — professional layout</div>
+          <div class="tl-task" style="border-left-color:var(--coral-mid);">WeasyPrint PDF generation + R2 upload</div>
+          <div class="tl-task" style="border-left-color:var(--coral-mid);">Email delivery with PDF attachment via SendGrid</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:var(--coral-mid);"></div>
+        <div class="tl-day">Day 8 — Follow-up scheduler</div>
+        <div class="tl-tasks">
+          <div class="tl-task" style="border-left-color:var(--coral-mid);">Celery beat follow-up tasks — day 2, 5, 10</div>
+          <div class="tl-task" style="border-left-color:var(--coral-mid);">Cancellation on buyer reply — revoke pending tasks</div>
+          <div class="tl-task" style="border-left-color:var(--coral-mid);">Owner WA notification when buyer replies</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:var(--teal-mid);"></div>
+        <div class="tl-day">Days 9–10 — Integration + testing</div>
+        <div class="tl-tasks">
+          <div class="tl-task" style="border-left-color:var(--teal-mid);">Full end-to-end test with real business data from manual sprint</div>
+          <div class="tl-task" style="border-left-color:var(--teal-mid);">Edge cases: missing buyer email, voice note inquiries, EDIT flow</div>
+          <div class="tl-task" style="border-left-color:var(--teal-mid);">First beta user onboarded — live on production</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+  <div style="font-family:var(--font-body);font-size:12px;color:#444;padding-bottom:2rem;">
+    Pakka Quote — Technical Architecture v1.0 · April 2026 · Innovatily
+  </div>
+
+</div>
+</body>
+</html>

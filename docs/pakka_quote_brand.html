@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pakka Quote — Brand Identity</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Noto+Sans:wght@400;500&family=Noto+Sans+Devanagari:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --saffron: #E8690A;
+  --saffron-light: #FDF0E6;
+  --saffron-dark: #B84F06;
+  --ink: #1C1917;
+  --ink-2: #44403C;
+  --ink-3: #78716C;
+  --ink-4: #A8A29E;
+  --cream: #FAFAF7;
+  --cream-2: #F5F5F0;
+  --cream-3: #EBEBЕ4;
+  --white: #FFFFFF;
+  --green: #166534;
+  --green-light: #DCFCE7;
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'Noto Sans', sans-serif;
+  --font-hindi: 'Noto Sans Devanagari', sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); background: var(--cream); color: var(--ink); font-size: 15px; line-height: 1.7; }
+
+/* ── Layout ── */
+.page { max-width: 900px; margin: 0 auto; padding: 4rem 2rem 6rem; }
+
+/* ── Cover ── */
+.cover {
+  text-align: center;
+  padding: 5rem 0 4rem;
+  border-bottom: 1px solid rgba(28,25,23,0.1);
+  margin-bottom: 5rem;
+  position: relative;
+}
+.cover::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(232,105,10,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.cover-eyebrow {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--saffron);
+  margin-bottom: 1.5rem;
+}
+.cover-wordmark {
+  font-family: var(--font-display);
+  font-size: 72px;
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -2px;
+  color: var(--ink);
+  margin-bottom: 0.5rem;
+}
+.cover-wordmark span { color: var(--saffron); }
+.cover-hindi {
+  font-family: var(--font-hindi);
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--ink-3);
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.02em;
+}
+.cover-tagline {
+  font-size: 16px;
+  color: var(--ink-3);
+  max-width: 420px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* ── Section ── */
+.section { margin-bottom: 5rem; }
+.section-label {
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--saffron);
+  margin-bottom: 0.5rem;
+}
+.section-title {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+.section-body { color: var(--ink-3); max-width: 600px; line-height: 1.75; }
+
+hr.divider { border: none; border-top: 1px solid rgba(28,25,23,0.08); margin: 4rem 0; }
+
+/* ── Logo system ── */
+.logo-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-top: 2rem; }
+.logo-cell {
+  border-radius: 12px;
+  padding: 2.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+.logo-cell.light { background: var(--white); border: 1px solid rgba(28,25,23,0.08); }
+.logo-cell.cream { background: var(--cream-2); border: 1px solid rgba(28,25,23,0.06); }
+.logo-cell.dark { background: var(--ink); }
+.logo-cell-label { font-size: 11px; color: var(--ink-4); font-weight: 500; letter-spacing: 0.05em; }
+.logo-cell.dark .logo-cell-label { color: rgba(255,255,255,0.35); }
+
+/* SVG logo mark */
+.logomark svg { display: block; }
+
+.wordmark-lockup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.wordmark-text {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  line-height: 1;
+}
+
+/* ── Color palette ── */
+.palette { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 1.5rem; }
+.swatch { border-radius: 10px; overflow: hidden; }
+.swatch-color { height: 80px; }
+.swatch-info { padding: 10px 12px; background: var(--white); border: 1px solid rgba(28,25,23,0.06); border-top: none; border-radius: 0 0 10px 10px; }
+.swatch-name { font-family: var(--font-display); font-size: 12px; font-weight: 600; color: var(--ink); margin-bottom: 2px; }
+.swatch-hex { font-size: 11px; color: var(--ink-4); font-family: monospace; }
+.swatch-role { font-size: 10px; color: var(--ink-4); margin-top: 2px; line-height: 1.4; }
+
+/* ── Typography ── */
+.type-specimen { margin-top: 1.5rem; }
+.type-row { padding: 1.5rem 0; border-bottom: 1px solid rgba(28,25,23,0.06); }
+.type-row:last-child { border-bottom: none; }
+.type-meta { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-4); margin-bottom: 8px; }
+.type-sample-display { font-family: var(--font-display); font-size: 42px; font-weight: 800; color: var(--ink); line-height: 1; letter-spacing: -1px; }
+.type-sample-heading { font-family: var(--font-display); font-size: 24px; font-weight: 700; color: var(--ink); line-height: 1.2; }
+.type-sample-body { font-family: var(--font-body); font-size: 15px; color: var(--ink-2); line-height: 1.7; max-width: 520px; }
+.type-sample-ui { font-family: var(--font-display); font-size: 13px; font-weight: 600; color: var(--ink-3); letter-spacing: 0.05em; text-transform: uppercase; }
+.type-sample-hindi { font-family: var(--font-hindi); font-size: 20px; font-weight: 500; color: var(--ink-2); line-height: 1.5; }
+
+/* ── Voice & tone ── */
+.tone-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem; }
+.tone-card {
+  background: var(--white);
+  border: 1px solid rgba(28,25,23,0.08);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+.tone-title { font-family: var(--font-display); font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 8px; }
+.tone-desc { font-size: 13px; color: var(--ink-3); line-height: 1.6; margin-bottom: 12px; }
+.tone-example { font-size: 13px; color: var(--ink-2); background: var(--cream-2); border-radius: 8px; padding: 10px 14px; font-style: italic; border-left: 2px solid var(--saffron); }
+.tone-vs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.tone-bad { font-size: 12px; color: #991B1B; background: #FEF2F2; border-radius: 6px; padding: 8px 10px; }
+.tone-bad::before { content: '✕  '; font-weight: 600; }
+.tone-good { font-size: 12px; color: var(--green); background: var(--green-light); border-radius: 6px; padding: 8px 10px; }
+.tone-good::before { content: '✓  '; font-weight: 600; }
+
+/* ── WhatsApp message style ── */
+.wa-preview {
+  background: #ECE5DD;
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-top: 1.5rem;
+  max-width: 420px;
+}
+.wa-bubble {
+  background: white;
+  border-radius: 0 10px 10px 10px;
+  padding: 10px 14px;
+  font-size: 14px;
+  color: #1C1917;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  margin-bottom: 8px;
+  font-family: var(--font-body);
+  max-width: 90%;
+}
+.wa-bubble.sent {
+  background: #DCF8C6;
+  border-radius: 10px 0 10px 10px;
+  margin-left: auto;
+}
+.wa-time { font-size: 10px; color: #86868A; text-align: right; margin-top: 3px; }
+
+/* ── Logo construction ── */
+.logo-construction {
+  background: var(--white);
+  border: 1px solid rgba(28,25,23,0.08);
+  border-radius: 12px;
+  padding: 2.5rem;
+  margin-top: 1.5rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: center;
+}
+
+/* ── Usage rules ── */
+.rules-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem; }
+.rule-card { border-radius: 10px; padding: 1.25rem; }
+.rule-card.do { background: var(--green-light); border: 1px solid rgba(22,101,52,0.15); }
+.rule-card.dont { background: #FEF2F2; border: 1px solid rgba(153,27,27,0.12); }
+.rule-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px; }
+.rule-card.do .rule-label { color: var(--green); }
+.rule-card.dont .rule-label { color: #991B1B; }
+.rule-text { font-size: 13px; color: var(--ink-2); line-height: 1.6; }
+
+/* ── Positioning statement ── */
+.positioning {
+  background: var(--ink);
+  border-radius: 16px;
+  padding: 3rem;
+  margin-top: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+.positioning::before {
+  content: '';
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 200px; height: 200px;
+  border-radius: 50%;
+  background: rgba(232,105,10,0.12);
+  pointer-events: none;
+}
+.positioning-label { font-family: var(--font-display); font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--saffron); margin-bottom: 1rem; }
+.positioning-text { font-family: var(--font-display); font-size: 22px; font-weight: 700; color: var(--white); line-height: 1.4; max-width: 560px; }
+.positioning-text em { color: var(--saffron); font-style: normal; }
+.positioning-sub { font-size: 14px; color: rgba(255,255,255,0.45); margin-top: 1rem; line-height: 1.65; max-width: 500px; }
+
+/* ── Tagline options ── */
+.tagline-list { margin-top: 1.5rem; display: flex; flex-direction: column; gap: 12px; }
+.tagline-item {
+  background: var(--white);
+  border: 1px solid rgba(28,25,23,0.08);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 1rem;
+}
+.tagline-item.primary { border-color: var(--saffron); border-width: 1.5px; background: var(--saffron-light); }
+.tagline-en { font-family: var(--font-display); font-size: 17px; font-weight: 700; color: var(--ink); }
+.tagline-hi { font-family: var(--font-hindi); font-size: 14px; color: var(--ink-3); margin-top: 3px; }
+.tagline-badge { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; padding: 3px 10px; border-radius: 20px; white-space: nowrap; }
+.tagline-item.primary .tagline-badge { background: var(--saffron); color: white; }
+.tagline-item .tagline-badge { background: var(--cream-2); color: var(--ink-4); }
+
+@media (max-width: 640px) {
+  .cover-wordmark { font-size: 48px; }
+  .logo-grid { grid-template-columns: 1fr; }
+  .palette { grid-template-columns: repeat(3, 1fr); }
+  .tone-grid, .rules-grid, .logo-construction { grid-template-columns: 1fr; }
+  .tagline-item { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Cover -->
+  <div class="cover">
+    <div class="cover-eyebrow">Brand Identity System</div>
+    <div class="cover-wordmark">Pakka<span>.</span><br>Quote</div>
+    <div class="cover-hindi">पक्का कोट</div>
+    <div class="cover-tagline">Quote bhejo. Deal pakko.</div>
+  </div>
+
+  <!-- Positioning -->
+  <div class="section">
+    <div class="section-label">01 — Brand strategy</div>
+    <div class="section-title">What Pakka Quote stands for</div>
+    <p class="section-body">Before any logo or color — the brand needs a clear point of view. Everything visual flows from this.</p>
+
+    <div class="positioning">
+      <div class="positioning-label">Positioning statement</div>
+      <div class="positioning-text">For Indian traders and manufacturers who lose deals because they respond too slowly — Pakka Quote is the <em>proposal system that works on WhatsApp</em>, so you send professional quotes in minutes, not days.</div>
+      <div class="positioning-sub">Unlike generic CRM tools that require behavior change, Pakka Quote meets the owner where they already are — no app, no dashboard, no training. Just forward the inquiry and approve the quote.</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Name meaning -->
+  <div class="section">
+    <div class="section-label">02 — The name</div>
+    <div class="section-title">Why "Pakka Quote" works</div>
+    <p class="section-body">"Pakka" (पक्का) is one of the most loaded words in Indian business culture. It means confirmed, solid, trustworthy, for real. When a trader says "pakka deal" — it's done. The name earns trust instantly with the target audience and is completely unmemorable to anyone outside it, which is a feature, not a bug.</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-top:1.5rem;">
+      <div style="background:var(--white);border:1px solid rgba(28,25,23,0.08);border-radius:12px;padding:1.25rem;">
+        <div style="font-family:var(--font-hindi);font-size:28px;font-weight:700;color:var(--saffron);margin-bottom:6px;">पक्का</div>
+        <div style="font-family:var(--font-display);font-size:13px;font-weight:700;color:var(--ink);margin-bottom:4px;">Pakka</div>
+        <div style="font-size:12px;color:var(--ink-3);line-height:1.55;">Confirmed. Solid. For real. The thing you want your proposal to feel like.</div>
+      </div>
+      <div style="background:var(--white);border:1px solid rgba(28,25,23,0.08);border-radius:12px;padding:1.25rem;">
+        <div style="font-family:var(--font-display);font-size:28px;font-weight:800;color:var(--ink);margin-bottom:6px;">Quote</div>
+        <div style="font-family:var(--font-display);font-size:13px;font-weight:700;color:var(--ink);margin-bottom:4px;">Quotation</div>
+        <div style="font-size:12px;color:var(--ink-3);line-height:1.55;">What every trader needs to send. The exact word they use. Not "proposal" or "estimate."</div>
+      </div>
+      <div style="background:var(--saffron-light);border:1px solid rgba(232,105,10,0.2);border-radius:12px;padding:1.25rem;">
+        <div style="font-family:var(--font-display);font-size:28px;font-weight:800;color:var(--saffron);margin-bottom:6px;">Together</div>
+        <div style="font-family:var(--font-display);font-size:13px;font-weight:700;color:var(--saffron-dark);margin-bottom:4px;">The brand promise</div>
+        <div style="font-size:12px;color:var(--saffron-dark);line-height:1.55;">A confirmed quotation. Fast, professional, done. Every time.</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Logo system -->
+  <div class="section">
+    <div class="section-label">03 — Logo</div>
+    <div class="section-title">Logo system</div>
+    <p class="section-body">The logo mark is a checkmark (✓) styled as a stamp — evoking the "pakka" seal of confirmation. Paired with the Syne wordmark in heavy weight. The dot after "Pakka" is a deliberate pause — like the moment of confirmation.</p>
+
+    <div class="logo-grid">
+
+      <!-- Light bg -->
+      <div class="logo-cell light">
+        <div class="wordmark-lockup">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+            <rect width="36" height="36" rx="8" fill="#E8690A"/>
+            <path d="M9 18.5L15 24.5L27 12" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <div class="wordmark-text" style="font-size:22px;color:#1C1917;">Pakka<span style="color:#E8690A;">.</span>Quote</div>
+        </div>
+        <div class="logo-cell-label">Primary — light</div>
+      </div>
+
+      <!-- Cream bg -->
+      <div class="logo-cell cream">
+        <div style="text-align:center;">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" style="margin-bottom:8px;">
+            <rect width="48" height="48" rx="10" fill="#E8690A"/>
+            <path d="M12 25L20 33L36 16" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:#1C1917;letter-spacing:-0.3px;">PAKKA<span style="color:#E8690A;">.</span>QUOTE</div>
+        </div>
+        <div class="logo-cell-label">Icon + stacked type</div>
+      </div>
+
+      <!-- Dark bg -->
+      <div class="logo-cell dark">
+        <div class="wordmark-lockup">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+            <rect width="36" height="36" rx="8" fill="#E8690A"/>
+            <path d="M9 18.5L15 24.5L27 12" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <div class="wordmark-text" style="font-size:22px;color:#FAFAF7;">Pakka<span style="color:#E8690A;">.</span>Quote</div>
+        </div>
+        <div class="logo-cell-label">Reversed — dark</div>
+      </div>
+
+    </div>
+
+    <div class="logo-construction">
+      <div>
+        <div style="font-family:var(--font-display);font-size:13px;font-weight:700;color:var(--ink);margin-bottom:12px;">Logo mark construction</div>
+        <p style="font-size:13px;color:var(--ink-3);line-height:1.65;margin-bottom:12px;">The icon is a rounded square (8px radius at 36px) in Pakka Saffron with a white bold checkmark. The check stroke is 3px at 36px, scaled proportionally. Corner radius is always 22% of the icon size.</p>
+        <p style="font-size:13px;color:var(--ink-3);line-height:1.65;">In lockup, the icon and wordmark are vertically centered. Gap between icon and type is exactly the cap-height of the wordmark. Never stretch or recolor the icon.</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px;align-items:center;">
+        <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+          <rect width="80" height="80" rx="18" fill="#E8690A"/>
+          <path d="M20 41L34 55L60 27" stroke="white" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+          <rect width="40" height="40" rx="9" fill="#E8690A"/>
+          <path d="M10 20.5L17 27.5L30 13" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <rect width="24" height="24" rx="5" fill="#E8690A"/>
+          <path d="M6 12.5L10 16.5L18 8" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div style="font-size:11px;color:var(--ink-4);">80px · 40px · 24px</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Color palette -->
+  <div class="section">
+    <div class="section-label">04 — Color</div>
+    <div class="section-title">Color palette</div>
+    <p class="section-body">Rooted in Indian visual culture — saffron as the hero, warm neutrals for trust, deep ink for authority. No cold blues or techy purples. This palette feels familiar to a trader in Surat or a manufacturer in Ludhiana.</p>
+
+    <div class="palette">
+      <div class="swatch">
+        <div class="swatch-color" style="background:#E8690A;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Pakka Saffron</div>
+          <div class="swatch-hex">#E8690A</div>
+          <div class="swatch-role">Primary · Action · Brand</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#1C1917;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Trade Ink</div>
+          <div class="swatch-hex">#1C1917</div>
+          <div class="swatch-role">Text · Authority · Dark bg</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#FAFAF7;"></div>
+        <div class="swatch-info" style="border-top:1px solid rgba(28,25,23,0.06);">
+          <div class="swatch-name">Ledger Cream</div>
+          <div class="swatch-hex">#FAFAF7</div>
+          <div class="swatch-role">Background · Paper feel</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#78716C;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Dust</div>
+          <div class="swatch-hex">#78716C</div>
+          <div class="swatch-role">Secondary text · Muted</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#166534;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Deal Green</div>
+          <div class="swatch-hex">#166534</div>
+          <div class="swatch-role">Success · Sent · Confirmed</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:1.5rem;padding:1.25rem 1.5rem;background:var(--white);border:1px solid rgba(28,25,23,0.08);border-radius:10px;">
+      <div style="font-family:var(--font-display);font-size:12px;font-weight:700;color:var(--ink);margin-bottom:8px;">Color logic</div>
+      <div style="font-size:13px;color:var(--ink-3);line-height:1.65;">Saffron is used for one thing: action. Buttons, CTAs, the logo mark. Never as a background for large areas. Trade Ink is used for all serious text. Deal Green only appears when something good happens — a proposal sent, a deal confirmed. Cream is the default surface — warm, not cold white.</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Typography -->
+  <div class="section">
+    <div class="section-label">05 — Typography</div>
+    <div class="section-title">Type system</div>
+    <p class="section-body">Syne for display and UI — geometric, confident, slightly unusual. Noto Sans for body and WhatsApp message copy — highly legible across languages. Noto Sans Devanagari for Hindi elements — same visual rhythm as the Latin set.</p>
+
+    <div class="type-specimen">
+      <div class="type-row">
+        <div class="type-meta">Display — Syne 800 · Headlines, hero text</div>
+        <div class="type-sample-display">Quote bhejo.<br>Deal pakko.</div>
+      </div>
+      <div class="type-row">
+        <div class="type-meta">Heading — Syne 700 · Section titles, card headers</div>
+        <div class="type-sample-heading">Send professional proposals in 2 minutes, not 2 days.</div>
+      </div>
+      <div class="type-row">
+        <div class="type-meta">Body — Noto Sans 400 · Paragraphs, descriptions</div>
+        <div class="type-sample-body">Forward the inquiry to Pakka Quote on WhatsApp. We parse it, build the proposal, you give the price, we send it. That's it. Your customer gets a professional PDF in minutes.</div>
+      </div>
+      <div class="type-row">
+        <div class="type-meta">UI label — Syne 600 · Buttons, tags, navigation</div>
+        <div class="type-sample-ui">Send proposal · View draft · Skip inquiry</div>
+      </div>
+      <div class="type-row">
+        <div class="type-meta">Hindi — Noto Sans Devanagari 500 · Bilingual elements</div>
+        <div class="type-sample-hindi">पक्का कोट — आपका quote ready है।<br>बस approve करो और भेज दो।</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Voice & tone -->
+  <div class="section">
+    <div class="section-label">06 — Voice & tone</div>
+    <div class="section-title">How Pakka Quote speaks</div>
+    <p class="section-body">The brand speaks like a sharp, straight-talking business partner — not a startup, not a tech company. Direct. Confident. No jargon. Never condescending. Rajesh should feel like he's talking to someone who understands his world.</p>
+
+    <div class="tone-grid">
+      <div class="tone-card">
+        <div class="tone-title">Direct, not pushy</div>
+        <div class="tone-desc">Say what the product does. Don't oversell. Indian traders have finely tuned BS detectors.</div>
+        <div class="tone-vs">
+          <div class="tone-bad">Revolutionize your sales pipeline with AI-powered automation</div>
+          <div class="tone-good">Send a professional quote in 2 minutes. From WhatsApp.</div>
+        </div>
+      </div>
+      <div class="tone-card">
+        <div class="tone-title">Confident, not arrogant</div>
+        <div class="tone-desc">The product works. Say so plainly. No hedging. No "maybe" or "could help."</div>
+        <div class="tone-vs">
+          <div class="tone-bad">We can potentially help you respond faster to inquiries</div>
+          <div class="tone-good">You'll never lose a deal to slow response time again.</div>
+        </div>
+      </div>
+      <div class="tone-card">
+        <div class="tone-title">Bilingual by nature</div>
+        <div class="tone-desc">Mix Hindi phrases naturally where they add warmth. Never forced. Never patronizing.</div>
+        <div class="tone-example">"Inquiry aate hi quote ready. Pakka."</div>
+      </div>
+      <div class="tone-card">
+        <div class="tone-title">Respects the owner's time</div>
+        <div class="tone-desc">Short sentences. Short messages. Never more words than needed. Rajesh is busy.</div>
+        <div class="tone-vs">
+          <div class="tone-bad">We would like to inform you that your proposal has been successfully generated and is ready for your review</div>
+          <div class="tone-good">Proposal ready. Reply SEND.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- WhatsApp voice -->
+  <div class="section">
+    <div class="section-label">07 — WhatsApp copy</div>
+    <div class="section-title">Message voice in product</div>
+    <p class="section-body">The product lives on WhatsApp. Every message Pakka Quote sends must feel human — not like a bot, not like a notification. Short. Scannable. Actionable. Here's the approved tone for key messages.</p>
+
+    <div class="wa-preview">
+      <div class="wa-bubble">📋 New inquiry — +91 98XXX XXXXX
+
+Product: TMT Fe500, 12mm
+Qty: 500 kg
+Delivery: Surat · Tuesday
+Urgency: High ⚠️
+
+Rate per kg?</div>
+      <div class="wa-bubble sent">68.50</div>
+      <div class="wa-bubble">📄 Draft ready
+
+Sharma Steel → Buyer
+500 kg TMT Fe500 @ ₹68.50
+Total: ₹34,250 + 18% GST
+Delivery: Surat · Tuesday
+
+SEND · EDIT · SKIP</div>
+      <div class="wa-bubble sent">SEND</div>
+      <div class="wa-bubble">✅ Sent. Follow-up: Day 2, 5, 10.</div>
+    </div>
+
+    <div style="margin-top:1rem;padding:1rem 1.25rem;background:var(--saffron-light);border:1px solid rgba(232,105,10,0.2);border-radius:10px;font-size:13px;color:var(--saffron-dark);line-height:1.65;">
+      <strong>Message rules:</strong> No full stops at the end of lines inside bubbles. Emoji used sparingly — only 📋 ✅ ⚠️ 📄 in product messages. Numbers always with ₹ and commas (₹34,250). Urgency only flagged with ⚠️ when delivery is within 48 hours.
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Taglines -->
+  <div class="section">
+    <div class="section-label">08 — Taglines</div>
+    <div class="section-title">Brand tagline options</div>
+    <p class="section-body">The primary tagline is bilingual — starts in Hindi, lands in English. This is intentional. It signals immediately who this product is for and earns a smile from the right audience.</p>
+
+    <div class="tagline-list">
+      <div class="tagline-item primary">
+        <div>
+          <div class="tagline-en">Quote bhejo. Deal pakko.</div>
+          <div class="tagline-hi">कोट भेजो। डील पक्को।</div>
+        </div>
+        <div class="tagline-badge">Primary</div>
+      </div>
+      <div class="tagline-item">
+        <div>
+          <div class="tagline-en">Professional quotes. From WhatsApp.</div>
+          <div class="tagline-hi">व्हाट्सऐप से professional quotation</div>
+        </div>
+        <div class="tagline-badge">Functional</div>
+      </div>
+      <div class="tagline-item">
+        <div>
+          <div class="tagline-en">Your next deal starts with a quote.</div>
+          <div class="tagline-hi">अगला deal पक्का करो</div>
+        </div>
+        <div class="tagline-badge">Aspirational</div>
+      </div>
+      <div class="tagline-item">
+        <div>
+          <div class="tagline-en">Inquiry in. Proposal out. Deal done.</div>
+        </div>
+        <div class="tagline-badge">For ads</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Usage rules -->
+  <div class="section">
+    <div class="section-label">09 — Usage rules</div>
+    <div class="section-title">Brand dos and don'ts</div>
+
+    <div class="rules-grid">
+      <div class="rule-card do">
+        <div class="rule-label">Do</div>
+        <div class="rule-text">Always write "Pakka Quote" with a capital P and capital Q — never "pakka quote" or "PAKKA QUOTE"</div>
+      </div>
+      <div class="rule-card dont">
+        <div class="rule-label">Don't</div>
+        <div class="rule-text">Never use the logo on a colored background other than white, cream, or Trade Ink dark</div>
+      </div>
+      <div class="rule-card do">
+        <div class="rule-label">Do</div>
+        <div class="rule-text">Use Saffron only for the logo, buttons, and key accents — never as a large background fill</div>
+      </div>
+      <div class="rule-card dont">
+        <div class="rule-label">Don't</div>
+        <div class="rule-text">Never use "AI-powered" in primary messaging — let the speed and quality speak. Rajesh doesn't care about AI.</div>
+      </div>
+      <div class="rule-card do">
+        <div class="rule-label">Do</div>
+        <div class="rule-text">Lead with the outcome: "proposal in 2 minutes", "deal won", "no deal lost to slow response"</div>
+      </div>
+      <div class="rule-card dont">
+        <div class="rule-label">Don't</div>
+        <div class="rule-text">Never use the words: "revolutionize", "disrupt", "synergy", "leverage", "ecosystem" — anywhere</div>
+      </div>
+      <div class="rule-card do">
+        <div class="rule-label">Do</div>
+        <div class="rule-text">Mix English and Hindi naturally in marketing — this is a feature of the brand, not a mistake</div>
+      </div>
+      <div class="rule-card dont">
+        <div class="rule-label">Don't</div>
+        <div class="rule-text">Never call it "software" or "platform" in owner-facing copy. Call it "a system" or just describe what it does.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
