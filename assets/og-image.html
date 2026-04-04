@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { width: 1200px; height: 630px; overflow: hidden; }
+.card {
+  width: 1200px; height: 630px;
+  background: linear-gradient(145deg, #1c1b1f 0%, #2a2730 50%, #1c1b1f 100%);
+  display: flex; flex-direction: column; justify-content: center; align-items: flex-start;
+  padding: 80px 100px;
+  position: relative;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+}
+.accent-line {
+  position: absolute; top: 0; left: 0; right: 0; height: 6px;
+  background: linear-gradient(90deg, #ff9933 0%, #ffb74d 50%, #ff9933 100%);
+}
+.logo {
+  font-family: 'Inter', sans-serif; font-size: 28px; font-weight: 700;
+  color: #e6e1e5; letter-spacing: 2px; margin-bottom: 40px;
+}
+.logo span { color: #ff9933; }
+.headline {
+  font-size: 62px; font-weight: 700; line-height: 1.1; letter-spacing: -2px;
+  color: #e6e1e5; margin-bottom: 24px; max-width: 900px;
+}
+.headline em { font-style: italic; color: #ffb74d; }
+.subline {
+  font-size: 24px; font-weight: 400; color: #938f99; line-height: 1.4;
+  max-width: 800px;
+}
+.badge {
+  position: absolute; bottom: 60px; right: 80px;
+  background: rgba(255,153,51,0.12); border: 1px solid rgba(255,153,51,0.3);
+  border-radius: 8px; padding: 12px 24px;
+  font-size: 16px; color: #ffb74d; font-weight: 600; letter-spacing: 1px;
+}
+.dots {
+  position: absolute; top: 60px; right: 80px;
+  display: flex; gap: 8px;
+}
+.dot {
+  width: 10px; height: 10px; border-radius: 50%; background: #ff9933; opacity: 0.4;
+}
+.dot:first-child { opacity: 1; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="accent-line"></div>
+  <div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+  <div class="logo">PAKKA<span>.</span>QUOTE</div>
+  <div class="headline">India ka quote.<br><em>China ki speed.</em></div>
+  <div class="subline">WhatsApp inquiry → Professional PDF proposal in under 5 minutes. AI-powered quote automation for Indian manufacturers.</div>
+  <div class="badge">pakkaquote.com</div>
+</div>
+</body>
+</html>

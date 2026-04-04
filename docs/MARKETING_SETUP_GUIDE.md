@@ -54,7 +54,7 @@ Add event parameters by pulling from the dataLayer variables.
 - HTML:
   ```html
   <script type="text/javascript" id="hs-script-loader" async defer
-    src="//js.hs-scripts.com/43867921.js"></script>
+    src="//js-na2.hs-scripts.com/245789604.js"></script>
   ```
 - Trigger: All Pages
 - Consent: Requires `analytics_storage`
@@ -130,7 +130,7 @@ Verify these are on in Admin → Data Streams → your stream → Enhanced Measu
 
 ## 3. HubSpot Tracking
 
-You already have the form working (Portal ID: 43867921). Now add the
+You already have the form working (Portal ID: 245789604). Now add the
 tracking script via GTM (Tag 3 above) so you can:
 
 - See which pages a contact visited before signing up
@@ -206,16 +206,20 @@ navigates to FAQ and signs up, the UTM attribution is preserved.
 
 ## Quick checklist
 
-- [ ] Create GTM container, replace `GTM-M26CDSJN` in all 4 HTML files
-- [ ] Create GA4 property, paste Measurement ID into GTM GA4 tag
-- [ ] Create GA4 custom event tags in GTM (see table above)
-- [ ] Mark `waitlist_signup` as conversion in GA4
-- [ ] Add HubSpot tracking script as GTM tag
-- [ ] Add domain in HubSpot tracking settings
+- [x] Create GTM container (GTM-M26CDSJN) — embedded in all 4 HTML files
+- [x] Create GA4 property (G-J6D1L0SGY5) — configured in GTM
+- [x] Create GA4 custom event tags in GTM (8 events)
+- [ ] **Publish latest GTM version** (event tags created but may not be published yet)
+- [ ] Mark `waitlist_signup` as conversion in GA4 (after first signup fires)
+- [x] Add HubSpot tracking script as GTM tag (Portal: 245789604)
+- [ ] Add domain `pakkaquote.com` in HubSpot tracking settings
 - [ ] Create HubSpot welcome email workflow
 - [ ] Set up Google Search Console + submit sitemap
-- [ ] Create GA4 audiences for retargeting
-- [ ] Generate UTM links for your first LinkedIn post and outreach
+- [ ] Create GA4 audiences for retargeting (see audience table above)
+- [x] Generate UTM links — see `docs/PakkaQuote_UTM_Links.xlsx`
+- [x] Create OG image (1200x630px) — `assets/og-image.png`, added to all pages
+- [x] Add Organization + WebSite JSON-LD schemas
+- [x] Add DNS prefetch hints for GTM, GA4, HubSpot
+- [x] Consent mode defaulted to granted (analytics), denied (ads)
 - [ ] (Later) Add LinkedIn Insight Tag in GTM
 - [ ] (Later) Add Meta Pixel in GTM
-- [ ] Create OG image (1200x630px) for social sharing previews

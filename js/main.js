@@ -67,8 +67,8 @@ document.addEventListener('DOMContentLoaded', function () {
   // 3. HubSpot Waitlist Form Submission
   // =========================================================================
 
-  var HUBSPOT_PORTAL_ID = '43867921';
-  var HUBSPOT_FORM_ID  = '44eb9ad3-6e7c-4e18-9db8-24a3d0058373';
+  var HUBSPOT_PORTAL_ID = '245789604';
+  var HUBSPOT_FORM_ID  = 'b1a4a7b4-bddf-4c87-b1a3-7af4b9fd9a31';
 
   var companyInput = document.getElementById('cta-company');
   var phoneInput   = document.getElementById('cta-phone');
@@ -95,7 +95,7 @@ document.addEventListener('DOMContentLoaded', function () {
       if (submitBtn) submitBtn.disabled = true;
 
       var endpoint =
-        'https://api.hsforms.com/submissions/v3/integration/submit/' +
+        'https://api-na2.hsforms.com/submissions/v3/integration/submit/' +
         HUBSPOT_PORTAL_ID + '/' + HUBSPOT_FORM_ID;
 
       var payload = {

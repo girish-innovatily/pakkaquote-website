@@ -313,17 +313,18 @@
   //    can use consent mode to gate tag firing.
   // ═══════════════════════════════════════════════════════════════
 
-  // Default: deny analytics until consent
+  // Default: grant analytics (India has no GDPR-style requirement).
+  // Ad storage stays denied until explicit consent for future ad pixels.
   window.dataLayer.push({
     event: 'consent_default',
-    analytics_storage: 'denied',
+    analytics_storage: 'granted',
     ad_storage: 'denied'
   });
 
   // Also set GA4 consent mode defaults
   window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
   gtag('consent', 'default', {
-    analytics_storage: 'denied',
+    analytics_storage: 'granted',
     ad_storage: 'denied',
     wait_for_update: 500
   });
