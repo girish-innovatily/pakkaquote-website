@@ -11,6 +11,7 @@
 
 const fs = require('node:fs');
 const path = require('node:path');
+const cheerio = require('cheerio');
 const { extractTexts } = require('./lib/extract.js');
 const { Translator } = require('./lib/translator.js');
 const { injectTranslations } = require('./lib/inject.js');
@@ -160,8 +161,6 @@ async function main() {
   // ── Phase 3: Inject & Write ──
   console.log('\n📦 Phase 3: Generating translated pages...\n');
 
-  const cheerio = require('cheerio');
-
   for (const lang of opts.langs) {
     const langDir = path.join(ROOT, lang);
     fs.mkdirSync(langDir, { recursive: true });
@@ -198,6 +197,32 @@ async function main() {
   });
   fs.writeFileSync(path.join(ROOT, 'sitemap.xml'), sitemapXml, 'utf-8');
   console.log('  ✓ sitemap.xml updated');
+
+  // ── Phase 5: Update English pages with hreflang tags ──
+  console.log('\n🏷️  Phase 5: Adding hreflang tags to English pages...\n');
+
+  for (const page of PAGES) {
+    const htmlPath = path.join(ROOT, page);
+    const html = fs.readFileSync(htmlPath, 'utf-8');
+    const $ = cheerio.load(html, { decodeEntities: false });
+
+    // Remove any existing hreflang tags (from previous runs)
+    $('link[rel="alternate"][hreflang]').remove();
+
+    // Add fresh hreflang tags
+    const hreflangs = [];
+    for (const l of ALL_LANGS_WITH_EN) {
+      const href = l === 'en'
+        ? `${BASE_URL}/${page}`
+        : `${BASE_URL}/${l}/${page}`;
+      hreflangs.push(`<link rel="alternate" hreflang="${l}" href="${href}">`);
+    }
+    hreflangs.push(`<link rel="alternate" hreflang="x-default" href="${BASE_URL}/${page}">`);
+    $('head').append('\n' + hreflangs.join('\n') + '\n');
+
+    fs.writeFileSync(htmlPath, $.html(), 'utf-8');
+    console.log(`  ✓ ${page} (hreflang added)`);
+  }
 
   const totalPages = opts.langs.length * PAGES.length;
   console.log(`\n✅ Done! Generated ${totalPages} translated pages across ${opts.langs.length} language(s).\n`);
