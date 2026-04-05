@@ -3,9 +3,12 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "serve . -l $PORT -s"
+    "start": "serve . -l $PORT -s",
+    "translate": "node scripts/translate.js",
+    "test:translate": "node --test scripts/test/"
   },
   "dependencies": {
+    "cheerio": "^1.2.0",
     "serve": "^14.2.4"
   }
 }
