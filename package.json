@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "serve . -l $PORT -s",
+    "start": "serve . -l $PORT",
     "translate": "node scripts/translate.js",
     "test:translate": "node --test scripts/test/*.test.js"
   },
