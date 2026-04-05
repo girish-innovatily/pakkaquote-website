@@ -183,4 +183,34 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
+  // =========================================================================
+  // 4. Language Switcher Toggle
+  // =========================================================================
+
+  var langSwitcher = document.querySelector('.lang-switcher');
+  var langBtn = document.querySelector('.lang-switcher-btn');
+
+  if (langSwitcher && langBtn) {
+    langBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var isOpen = langSwitcher.classList.toggle('open');
+      langBtn.setAttribute('aria-expanded', isOpen);
+    });
+
+    document.addEventListener('click', function (e) {
+      if (!langSwitcher.contains(e.target)) {
+        langSwitcher.classList.remove('open');
+        langBtn.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && langSwitcher.classList.contains('open')) {
+        langSwitcher.classList.remove('open');
+        langBtn.setAttribute('aria-expanded', 'false');
+        langBtn.focus();
+      }
+    });
+  }
+
 });
