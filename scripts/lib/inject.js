@@ -182,6 +182,10 @@ function injectTranslations(html, translations, { lang, page, baseUrl, languages
     ogUrl.attr('content', `${baseUrl}/${lang}/${page}`);
   }
 
+  // 13. Add language to dataLayer for GA4 segmentation
+  const langScript = `<script>window.dataLayer = window.dataLayer || []; window.dataLayer.push({'page_language': '${lang}'});</script>`;
+  $('head').append(langScript + '\n');
+
   return $.html();
 }
 
