@@ -45,7 +45,11 @@ class Translator {
   }
 
   unwrapNoTranslate(text) {
-    return text.replace(/<span class="notranslate">([^<]+)<\/span>/g, '$1');
+    // Handle both regular quotes and HTML-entity-encoded quotes (&quot;)
+    return text
+      .replace(/<span class="notranslate">([^<]+)<\/span>/g, '$1')
+      .replace(/<span class=&quot;notranslate&quot;>([^<]+)<\/span>/g, '$1')
+      .replace(/<span class=&#34;notranslate&#34;>([^<]+)<\/span>/g, '$1');
   }
 
   async translate(texts, targetLang) {
@@ -75,7 +79,8 @@ class Translator {
       this.saveCache(targetLang);
     }
 
-    return results;
+    // Safety net: unwrap any lingering notranslate spans (from cache or API)
+    return results.map(r => this.unwrapNoTranslate(r));
   }
 
   async callApi(texts, targetLang) {
