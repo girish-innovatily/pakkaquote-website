@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "serve . -l $PORT",
+    "build": "node scripts/translate.js",
     "translate": "node scripts/translate.js",
     "test:translate": "node --test scripts/test/*.test.js"
   },
