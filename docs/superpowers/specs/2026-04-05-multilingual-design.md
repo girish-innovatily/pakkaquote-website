@@ -47,7 +47,7 @@ Single Node.js script with three phases:
 ### Dependencies Added
 
 - `cheerio` — HTML parsing and manipulation
-- `@google-cloud/translate` — Google Cloud Translation API v2
+- Google Cloud Translation REST API v2 (called via `fetch`, no SDK needed)
 
 ## File Structure
 
