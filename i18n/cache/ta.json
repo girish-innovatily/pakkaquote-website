@@ -93,7 +93,6 @@
   "Get started": "தொடங்குங்கள்",
   "Most Popular": "மிகவும் பிரபலமான",
   "Growth": "வளர்ச்சி",
-  "Rs. 5,999": "ரூ. 5,999",
   "per month": "மாதத்திற்கு",
   "200 proposals per month": "மாதத்திற்கு 200 முன்மொழிவுகள்",
   "Email follow-ups (day 2, 5, 10)": "மின்னஞ்சல் பின்தொடர்தல்கள் (நாள் 2, 5, 10)",
@@ -320,7 +319,6 @@
   "How are follow-ups handled?": "பின்தொடர் நடவடிக்கைகள் எவ்வாறு கையாளப்படுகின்றன?",
   "After a proposal is sent, Pakka Quote automatically sends follow-up emails on your behalf — on day 2 (warm nudge), day 5 (check-in with quote validity reminder), and day 10 (final touchpoint). If the buyer replies to any follow-up, the sequence stops automatically. You can also stop it manually anytime from WhatsApp.": "ஒரு முன்மொழிவு அனுப்பப்பட்ட பிறகு, <span class=\"notranslate\">Pakka Quote</span> உங்கள் சார்பாகத் தானாகவே பின்தொடர் மின்னஞ்சல்களை அனுப்பும் — 2 ஆம் நாளில் (ஒரு சிறு நினைவூட்டல்), 5 ஆம் நாளில் (விலைமதிப்பின் செல்லுபடியாகும் தன்மையை நினைவூட்டும் சரிபார்ப்பு), மற்றும் 10 ஆம் நாளில் (இறுதித் தொடர்பு). வாங்குபவர் ஏதேனும் ஒரு பின்தொடர் மின்னஞ்சலுக்குப் பதிலளித்தால், இந்தச் செயல்முறை தானாகவே நின்றுவிடும். நீங்கள் எப்போது வேண்டுமானாலும் WhatsApp இருந்தும் இதை கைமுறையாக நிறுத்தலாம்.",
   "How much does Pakka Quote cost?": "<span class=\"notranslate\">Pakka Quote</span> விலை எவ்வளவு?",
-  "Plans start at Rs. 2,999/month for 50 proposals. The Growth plan at Rs. 5,999/month includes 200 proposals with email follow-ups and priority support. For larger teams, we offer custom plans with unlimited proposals. The first 10 customers get a special early-adopter rate of Rs. 999/month for 3 months in exchange for feedback and a testimonial.": "50 முன்மொழிவுகளுக்கான திட்டங்கள் மாதம் ரூ. 2,999 முதல் தொடங்குகின்றன. மாதம் ரூ. 5,999 விலையிலான வளர்ச்சித் திட்டத்தில், மின்னஞ்சல் பின்தொடர்தல்கள் மற்றும் முன்னுரிமை ஆதரவுடன் 200 முன்மொழிவுகள் அடங்கும். பெரிய குழுக்களுக்கு, வரம்பற்ற முன்மொழிவுகளுடன் கூடிய தனிப்பயன் திட்டங்களை நாங்கள் வழங்குகிறோம். முதல் 10 வாடிக்கையாளர்கள், கருத்து மற்றும் சான்றறிக்கைக்கு ஈடாக, 3 மாதங்களுக்கு மாதம் ரூ. 999 என்ற சிறப்பு ஆரம்பகாலப் பயனர் கட்டணத்தைப் பெறுகிறார்கள்.",
   "Is there a free trial?": "இலவச சோதனைக் காலம் உள்ளதா?",
   "Yes — we offer a Free Beta plan with 10 proposals per month so you can try the product before committing. It includes the full WhatsApp workflow, AI parsing, and branded PDF proposals. No credit card required.": "ஆம் — நீங்கள் முழுமையாக ஈடுபடுவதற்கு முன்பு தயாரிப்பை முயற்சித்துப் பார்ப்பதற்காக, மாதத்திற்கு 10 முன்மொழிவுகளுடன் கூடிய ஒரு இலவச பீட்டா திட்டத்தை நாங்கள் வழங்குகிறோம். இதில் முழுமையான WhatsApp பணிப்பாய்வு, AI பகுப்பாய்வு மற்றும் பிராண்டட் PDF முன்மொழிவுகள் ஆகியவை அடங்கும். கிரெடிட் கார்டு தேவையில்லை.",
   "What counts as one \"proposal\"?": "ஒரு &#39;முன்மொழிவு&#39; என எதைக் கருதலாம்?",
@@ -354,7 +352,6 @@
   "What it costs": "அதன் விலை என்ன",
   "Plans start at": "திட்டங்கள் இதிலிருந்து தொடங்குகின்றன",
   "Rs. 2,999/month": "மாதம் ரூ. 2,999",
-  "for 50 proposals. The Growth plan at Rs. 5,999/month includes 200 proposals with email follow-ups and priority support. For larger teams, we offer custom plans with unlimited proposals. The first 10 customers get a special early-adopter rate of": "50 முன்மொழிவுகளுக்கு. மாதம் ரூ. 5,999 கட்டணத்திலுள்ள வளர்ச்சித் திட்டத்தில், மின்னஞ்சல் பின்தொடர்தல்கள் மற்றும் முன்னுரிமை ஆதரவுடன் 200 முன்மொழிவுகள் அடங்கும். பெரிய குழுக்களுக்கு, வரம்பற்ற முன்மொழிவுகளுடன் கூடிய தனிப்பயன் திட்டங்களை நாங்கள் வழங்குகிறோம். முதல் 10 வாடிக்கையாளர்களுக்கு ஒரு சிறப்பு ஆரம்பகாலப் பயனர் கட்டணம் கிடைக்கும்.",
   "Rs. 999/month for 3 months": "3 மாதங்களுக்கு மாதம் ரூ. 999",
   "in exchange for feedback and a testimonial.": "பின்னூட்டம் மற்றும் சான்றறிக்கைக்குப் பதிலாக.",
   "Think about it this way: if a typical order in your business is worth Rs. 30,000–50,000, and Pakka Quote helps you respond fast enough to win even one deal you would have otherwise lost — that single deal pays for": "இதை இப்படி யோசித்துப் பாருங்கள்: உங்கள் வணிகத்தில் ஒரு வழக்கமான ஆர்டரின் மதிப்பு ரூ. 30,000 முதல் 50,000 வரை இருக்கும் பட்சத்தில், நீங்கள் இழந்திருக்கக்கூடிய ஒரே ஒரு ஒப்பந்தத்தையாவது வெல்லும் அளவுக்கு <span class=\"notranslate\">Pakka Quote</span> உங்களுக்கு விரைவாகப் பதிலளிக்க உதவினால் — அந்த ஒரு ஒப்பந்தமே உங்கள் மொத்தச் செலவை ஈடுசெய்துவிடும்.",
@@ -403,5 +400,8 @@
   "Email Us": "எங்களுக்கு மின்னஞ்சல் அனுப்புங்கள்",
   "Convinced?": "நம்பிவிட்டீர்களா?",
   "Let's get you": "உங்களை அழைத்து வருவோம்",
-  "quoting.": "மேற்கோள் காட்டுதல்."
+  "quoting.": "மேற்கோள் காட்டுதல்.",
+  "Rs. 1,999": "ரூ. 1,999",
+  "Plans start at Rs. 2,999/month for 50 proposals. The Growth plan at Rs. 1,999/month includes 200 proposals with email follow-ups and priority support. For larger teams, we offer custom plans with unlimited proposals. The first 10 customers get a special early-adopter rate of Rs. 999/month for 3 months in exchange for feedback and a testimonial.": "50 முன்மொழிவுகளுக்கான திட்டங்கள் மாதம் ரூ. 2,999 முதல் தொடங்குகின்றன. மாதம் ரூ. 1,999 விலையிலான வளர்ச்சித் திட்டத்தில், மின்னஞ்சல் பின்தொடர்தல்கள் மற்றும் முன்னுரிமை ஆதரவுடன் 200 முன்மொழிவுகள் அடங்கும். பெரிய குழுக்களுக்கு, வரம்பற்ற முன்மொழிவுகளுடன் கூடிய தனிப்பயன் திட்டங்களை நாங்கள் வழங்குகிறோம். முதல் 10 வாடிக்கையாளர்கள், கருத்து மற்றும் சான்றறிக்கைக்கு ஈடாக, 3 மாதங்களுக்கு மாதம் ரூ. 999 என்ற சிறப்பு ஆரம்பகாலப் பயனர் கட்டணத்தைப் பெறுகிறார்கள்.",
+  "for 50 proposals. The Growth plan at Rs. 1,999/month includes 200 proposals with email follow-ups and priority support. For larger teams, we offer custom plans with unlimited proposals. The first 10 customers get a special early-adopter rate of": "50 முன்மொழிவுகளுக்கு. மாதம் ரூ. 1,999 கட்டணத்திலான வளர்ச்சித் திட்டத்தில், மின்னஞ்சல் பின்தொடர்தல்கள் மற்றும் முன்னுரிமை ஆதரவுடன் 200 முன்மொழிவுகள் அடங்கும். பெரிய குழுக்களுக்கு, வரம்பற்ற முன்மொழிவுகளுடன் கூடிய தனிப்பயன் திட்டங்களை நாங்கள் வழங்குகிறோம். முதல் 10 வாடிக்கையாளர்களுக்கு, முன்கூட்டியே ஏற்றுக்கொள்பவர்களுக்கான சிறப்பு விலை விகிதம் கிடைக்கும்."
 }

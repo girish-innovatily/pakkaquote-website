@@ -93,7 +93,6 @@
   "Get started": "सुरुवात करा",
   "Most Popular": "सर्वाधिक लोकप्रिय",
   "Growth": "वाढ",
-  "Rs. 5,999": "रु. ५,९९९",
   "per month": "दर महिन्याला",
   "200 proposals per month": "दरमहा २०० प्रस्ताव",
   "Email follow-ups (day 2, 5, 10)": "ईमेलद्वारे पाठपुरावा (दिवस २, ५, १०)",
@@ -320,7 +319,6 @@
   "How are follow-ups handled?": "पाठपुरावा कसा हाताळला जातो?",
   "After a proposal is sent, Pakka Quote automatically sends follow-up emails on your behalf — on day 2 (warm nudge), day 5 (check-in with quote validity reminder), and day 10 (final touchpoint). If the buyer replies to any follow-up, the sequence stops automatically. You can also stop it manually anytime from WhatsApp.": "प्रस्ताव पाठवल्यानंतर, <span class=\"notranslate\">Pakka Quote</span> तुमच्या वतीने आपोआप फॉलो-अप ईमेल पाठवते — दुसऱ्या दिवशी (सलोख्याचा संदेश), पाचव्या दिवशी (कोटच्या वैधतेच्या स्मरणपत्रासह चौकशी) आणि दहाव्या दिवशी (अंतिम संपर्क). जर खरेदीदाराने कोणत्याही फॉलो-अपला उत्तर दिले, तर ही प्रक्रिया आपोआप थांबते. तुम्ही WhatsApp कधीही स्वतःहून (मॅन्युअली) ही प्रक्रिया थांबवू शकता.",
   "How much does Pakka Quote cost?": "<span class=\"notranslate\">Pakka Quote</span> किंमत किती आहे?",
-  "Plans start at Rs. 2,999/month for 50 proposals. The Growth plan at Rs. 5,999/month includes 200 proposals with email follow-ups and priority support. For larger teams, we offer custom plans with unlimited proposals. The first 10 customers get a special early-adopter rate of Rs. 999/month for 3 months in exchange for feedback and a testimonial.": "योजनांची सुरुवात ५० प्रस्तावांसाठी दरमहा रु. २,९९९ पासून होते. दरमहा रु. ५,९९९ च्या ग्रोथ प्लॅनमध्ये ईमेल फॉलो-अप आणि प्राधान्य समर्थनासह २०० प्रस्तावांचा समावेश आहे. मोठ्या टीम्ससाठी, आम्ही अमर्यादित प्रस्तावांसह सानुकूल योजना ऑफर करतो. अभिप्राय आणि प्रशस्तिपत्राच्या बदल्यात, पहिल्या १० ग्राहकांना ३ महिन्यांसाठी दरमहा रु. ९९९ चा विशेष अर्ली-अ‍ॅडॉप्टर दर मिळेल.",
   "Is there a free trial?": "मोफत चाचणी उपलब्ध आहे का?",
   "Yes — we offer a Free Beta plan with 10 proposals per month so you can try the product before committing. It includes the full WhatsApp workflow, AI parsing, and branded PDF proposals. No credit card required.": "होय — आम्ही दरमहा १० प्रस्तावांसह एक मोफत बीटा प्लॅन ऑफर करतो, जेणेकरून तुम्ही खरेदी करण्यापूर्वी उत्पादन वापरून पाहू शकाल. यामध्ये संपूर्ण WhatsApp वर्कफ्लो, एआय पार्सिंग आणि ब्रँडेड PDF प्रस्तावांचा समावेश आहे. क्रेडिट कार्डची आवश्यकता नाही.",
   "What counts as one \"proposal\"?": "एक &quot;प्रस्ताव&quot; कशाला म्हणतात?",
@@ -354,7 +352,6 @@
   "What it costs": "त्याची किंमत",
   "Plans start at": "योजनांची सुरुवात येथून होते",
   "Rs. 2,999/month": "रु. २,९९९/महिना",
-  "for 50 proposals. The Growth plan at Rs. 5,999/month includes 200 proposals with email follow-ups and priority support. For larger teams, we offer custom plans with unlimited proposals. The first 10 customers get a special early-adopter rate of": "५० प्रस्तावांसाठी. रु. ५,९९९/महिन्याच्या ग्रोथ प्लॅनमध्ये ईमेल फॉलो-अप आणि प्राधान्य समर्थनासह २०० प्रस्तावांचा समावेश आहे. मोठ्या टीम्ससाठी, आम्ही अमर्यादित प्रस्तावांसह कस्टम प्लॅन्स ऑफर करतो. पहिल्या १० ग्राहकांना विशेष अर्ली-अ‍ॅडॉप्टर दर मिळेल.",
   "Rs. 999/month for 3 months": "३ महिन्यांसाठी दरमहा रु. ९९९",
   "in exchange for feedback and a testimonial.": "अभिप्राय आणि प्रशस्तिपत्राच्या बदल्यात.",
   "Think about it this way: if a typical order in your business is worth Rs. 30,000–50,000, and Pakka Quote helps you respond fast enough to win even one deal you would have otherwise lost — that single deal pays for": "असा विचार करा: जर तुमच्या व्यवसायातील एका सामान्य ऑर्डरची किंमत ३०,००० ते ५०,००० रुपये असेल आणि <span class=\"notranslate\">Pakka Quote</span> तुम्हाला इतक्या वेगाने प्रतिसाद देण्यास मदत करतो की तुम्ही अन्यथा गमावलेला एक जरी सौदा जिंकू शकता — तर तो एकच सौदा तुमच्या खर्चाची भरपाई करतो.",
@@ -403,5 +400,8 @@
   "Email Us": "आम्हाला ईमेल करा",
   "Convinced?": "पटलं का?",
   "Let's get you": "चला तुम्हाला",
-  "quoting.": "उद्धृत करणे."
+  "quoting.": "उद्धृत करणे.",
+  "Rs. 1,999": "रु. १,९९९",
+  "Plans start at Rs. 2,999/month for 50 proposals. The Growth plan at Rs. 1,999/month includes 200 proposals with email follow-ups and priority support. For larger teams, we offer custom plans with unlimited proposals. The first 10 customers get a special early-adopter rate of Rs. 999/month for 3 months in exchange for feedback and a testimonial.": "योजनांची सुरुवात ५० प्रस्तावांसाठी दरमहा रु. २,९९९ पासून होते. दरमहा रु. १,९९९ च्या ग्रोथ प्लॅनमध्ये ईमेल फॉलो-अप आणि प्राधान्य समर्थनासह २०० प्रस्तावांचा समावेश आहे. मोठ्या टीमसाठी, आम्ही अमर्यादित प्रस्तावांसह सानुकूल योजना ऑफर करतो. अभिप्राय आणि प्रशस्तिपत्राच्या बदल्यात, पहिल्या १० ग्राहकांना ३ महिन्यांसाठी दरमहा रु. ९९९ चा विशेष अर्ली-अ‍ॅडॉप्टर दर मिळेल.",
+  "for 50 proposals. The Growth plan at Rs. 1,999/month includes 200 proposals with email follow-ups and priority support. For larger teams, we offer custom plans with unlimited proposals. The first 10 customers get a special early-adopter rate of": "५० प्रस्तावांसाठी. रु. १,९९९/महिन्याच्या ग्रोथ प्लॅनमध्ये ईमेल फॉलो-अप आणि प्राधान्य समर्थनासह २०० प्रस्तावांचा समावेश आहे. मोठ्या टीम्ससाठी, आम्ही अमर्यादित प्रस्तावांसह कस्टम प्लॅन्स ऑफर करतो. पहिल्या १० ग्राहकांना विशेष अर्ली-अ‍ॅडॉप्टर दर मिळतो."
 }

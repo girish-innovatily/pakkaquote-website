@@ -93,7 +93,6 @@
   "Get started": "શરૂ કરો",
   "Most Popular": "સૌથી વધુ લોકપ્રિય",
   "Growth": "વૃદ્ધિ",
-  "Rs. 5,999": "૫,૯૯૯ રૂપિયા",
   "per month": "દર મહિને",
   "200 proposals per month": "દર મહિને 200 દરખાસ્તો",
   "Email follow-ups (day 2, 5, 10)": "ઇમેઇલ ફોલો-અપ્સ (દિવસ 2, 5, 10)",
@@ -320,7 +319,6 @@
   "How are follow-ups handled?": "ફોલો-અપ્સ કેવી રીતે હેન્ડલ કરવામાં આવે છે?",
   "After a proposal is sent, Pakka Quote automatically sends follow-up emails on your behalf — on day 2 (warm nudge), day 5 (check-in with quote validity reminder), and day 10 (final touchpoint). If the buyer replies to any follow-up, the sequence stops automatically. You can also stop it manually anytime from WhatsApp.": "દરખાસ્ત મોકલ્યા પછી, <span class=\"notranslate\">Pakka Quote</span> આપમેળે તમારા વતી ફોલો-અપ ઇમેઇલ મોકલે છે - દિવસ 2 (હૂંફાળું નજ), દિવસ 5 (ક્વોટ માન્યતા રીમાઇન્ડર સાથે ચેક-ઇન), અને દિવસ 10 (અંતિમ સંપર્ક બિંદુ). જો ખરીદનાર કોઈપણ ફોલો-અપનો જવાબ આપે છે, તો ક્રમ આપમેળે બંધ થઈ જાય છે. તમે WhatsApp પરથી ગમે ત્યારે તેને મેન્યુઅલી પણ રોકી શકો છો.",
   "How much does Pakka Quote cost?": "<span class=\"notranslate\">Pakka Quote</span> કિંમત કેટલી છે?",
-  "Plans start at Rs. 2,999/month for 50 proposals. The Growth plan at Rs. 5,999/month includes 200 proposals with email follow-ups and priority support. For larger teams, we offer custom plans with unlimited proposals. The first 10 customers get a special early-adopter rate of Rs. 999/month for 3 months in exchange for feedback and a testimonial.": "૫૦ દરખાસ્તો માટે રૂ. ૨,૯૯૯/મહિનાથી શરૂ થતી યોજનાઓ. રૂ. ૫,૯૯૯/મહિનાના ગ્રોથ પ્લાનમાં ઇમેઇલ ફોલો-અપ્સ અને પ્રાથમિકતા સપોર્ટ સાથે ૨૦૦ દરખાસ્તો શામેલ છે. મોટી ટીમો માટે, અમે અમર્યાદિત દરખાસ્તો સાથે કસ્ટમ યોજનાઓ ઓફર કરીએ છીએ. પ્રથમ ૧૦ ગ્રાહકોને પ્રતિસાદ અને પ્રશંસાપત્રના બદલામાં ૩ મહિના માટે રૂ. ૯૯૯/મહિનાનો ખાસ પ્રારંભિક-દત્તક દર મળે છે.",
   "Is there a free trial?": "શું મફત ટ્રાયલ છે?",
   "Yes — we offer a Free Beta plan with 10 proposals per month so you can try the product before committing. It includes the full WhatsApp workflow, AI parsing, and branded PDF proposals. No credit card required.": "હા — અમે દર મહિને 10 દરખાસ્તો સાથે મફત બીટા પ્લાન ઓફર કરીએ છીએ જેથી તમે પ્રતિબદ્ધતા પહેલા ઉત્પાદન અજમાવી શકો. તેમાં સંપૂર્ણ WhatsApp વર્કફ્લો, AI પાર્સિંગ અને બ્રાન્ડેડ PDF દરખાસ્તો શામેલ છે. કોઈ ક્રેડિટ કાર્ડની જરૂર નથી.",
   "What counts as one \"proposal\"?": "એક &quot;પ્રસ્તાવ&quot; તરીકે શું ગણાય?",
@@ -354,7 +352,6 @@
   "What it costs": "તેની કિંમત શું છે",
   "Plans start at": "યોજનાઓ શરૂ થાય છે",
   "Rs. 2,999/month": "રૂ. ૨,૯૯૯/મહિને",
-  "for 50 proposals. The Growth plan at Rs. 5,999/month includes 200 proposals with email follow-ups and priority support. For larger teams, we offer custom plans with unlimited proposals. The first 10 customers get a special early-adopter rate of": "૫૦ દરખાસ્તો માટે. ૫,૯૯૯ રૂપિયા/મહિનાના ગ્રોથ પ્લાનમાં ૨૦૦ દરખાસ્તો ઇમેઇલ ફોલો-અપ્સ અને પ્રાથમિકતા સપોર્ટ સાથે શામેલ છે. મોટી ટીમો માટે, અમે અમર્યાદિત દરખાસ્તો સાથે કસ્ટમ પ્લાન ઓફર કરીએ છીએ. પ્રથમ ૧૦ ગ્રાહકોને ખાસ પ્રારંભિક-દત્તક દર મળે છે.",
   "Rs. 999/month for 3 months": "૩ મહિના માટે રૂ. ૯૯૯/મહિને",
   "in exchange for feedback and a testimonial.": "પ્રતિસાદ અને પ્રશંસાપત્રના બદલામાં.",
   "Think about it this way: if a typical order in your business is worth Rs. 30,000–50,000, and Pakka Quote helps you respond fast enough to win even one deal you would have otherwise lost — that single deal pays for": "આ રીતે વિચારો: જો તમારા વ્યવસાયમાં સામાન્ય ઓર્ડર રૂ. 30,000-50,000 નો હોય, અને <span class=\"notranslate\">Pakka Quote</span> તમને એક પણ સોદો જીતવા માટે ઝડપથી જવાબ આપવામાં મદદ કરે છે, તો તમે અન્યથા હારી ગયા હોત - તે એકલ સોદો",
@@ -403,5 +400,8 @@
   "Email Us": "અમને ઇમેઇલ કરો",
   "Convinced?": "ખાતરી થઈ?",
   "Let's get you": "ચાલો તમને મળીએ.",
-  "quoting.": "અવતરણ."
+  "quoting.": "અવતરણ.",
+  "Rs. 1,999": "રૂ. ૧,૯૯૯",
+  "Plans start at Rs. 2,999/month for 50 proposals. The Growth plan at Rs. 1,999/month includes 200 proposals with email follow-ups and priority support. For larger teams, we offer custom plans with unlimited proposals. The first 10 customers get a special early-adopter rate of Rs. 999/month for 3 months in exchange for feedback and a testimonial.": "૫૦ દરખાસ્તો માટે યોજનાઓ રૂ. ૨,૯૯૯/મહિનાથી શરૂ થાય છે. રૂ. ૧,૯૯૯/મહિનાના ગ્રોથ પ્લાનમાં ઇમેઇલ ફોલો-અપ્સ અને પ્રાથમિકતા સપોર્ટ સાથે ૨૦૦ દરખાસ્તો શામેલ છે. મોટી ટીમો માટે, અમે અમર્યાદિત દરખાસ્તો સાથે કસ્ટમ યોજનાઓ ઓફર કરીએ છીએ. પ્રથમ ૧૦ ગ્રાહકોને પ્રતિસાદ અને પ્રશંસાપત્રના બદલામાં ૩ મહિના માટે રૂ. ૯૯૯/મહિનાનો ખાસ પ્રારંભિક-દત્તક દર મળે છે.",
+  "for 50 proposals. The Growth plan at Rs. 1,999/month includes 200 proposals with email follow-ups and priority support. For larger teams, we offer custom plans with unlimited proposals. The first 10 customers get a special early-adopter rate of": "૫૦ દરખાસ્તો માટે. ૧,૯૯૯ રૂપિયા/મહિનાના ગ્રોથ પ્લાનમાં ૨૦૦ દરખાસ્તો ઇમેઇલ ફોલો-અપ્સ અને પ્રાથમિકતા સપોર્ટ સાથે શામેલ છે. મોટી ટીમો માટે, અમે અમર્યાદિત દરખાસ્તો સાથે કસ્ટમ પ્લાન ઓફર કરીએ છીએ. પ્રથમ ૧૦ ગ્રાહકોને ખાસ પ્રારંભિક-દત્તક દર મળે છે."
 }
