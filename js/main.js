@@ -122,6 +122,18 @@ document.addEventListener('DOMContentLoaded', function () {
           return response.json();
         })
         .then(function () {
+          // Push waitlist_signup to dataLayer before showing success UI
+          var utm = (window.pqTracking && window.pqTracking.utmData) || {};
+          var page = (window.pqTracking && window.pqTracking.pageInfo) || {};
+          window.dataLayer = window.dataLayer || [];
+          window.dataLayer.push({
+            event:         'waitlist_signup',
+            signup_source: page.name || document.title,
+            company_name:  company,
+            utm_source:    utm.utm_source   || '(direct)',
+            utm_campaign:  utm.utm_campaign || '(not set)'
+          });
+
           showFormSuccess('Thank you! You have been added to the waitlist.');
         })
         .catch(function (err) {
