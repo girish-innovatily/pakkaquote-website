@@ -620,6 +620,125 @@ input:focus-visible {
 
 
 /* ══════════════════════════════════════════════════════════════
+   Waitlist Modal
+   ══════════════════════════════════════════════════════════════ */
+
+.wl-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(0, 0, 0, 0.6);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.wl-modal-backdrop.is-visible {
+  opacity: 1;
+}
+
+.wl-modal {
+  background: var(--inverse-surface);
+  border-radius: 8px;
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 420px;
+  position: relative;
+  text-align: center;
+  transform: translateY(16px) scale(0.97);
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.wl-modal-backdrop.is-visible .wl-modal {
+  transform: translateY(0) scale(1);
+}
+
+.wl-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
+  border: none;
+  color: rgba(242, 241, 237, 0.35);
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+  font-size: 20px;
+  transition: color 0.15s;
+}
+
+.wl-modal-close:hover {
+  color: rgba(242, 241, 237, 0.7);
+}
+
+.wl-modal h3 {
+  font-family: var(--font-h);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--inverse-on-surface);
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+  margin-bottom: 0.5rem;
+}
+
+.wl-modal h3 em {
+  color: var(--primary-container);
+  font-style: normal;
+}
+
+.wl-modal-sub {
+  font-size: 14px;
+  color: rgba(242, 241, 237, 0.4);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.wl-modal .cta-form {
+  flex-direction: column;
+  max-width: 100%;
+}
+
+.wl-modal .cta-btn {
+  width: 100%;
+}
+
+.wl-modal .cta-fine {
+  margin-top: 0.75rem;
+}
+
+.wl-modal .form-status {
+  font-family: var(--font-l);
+  font-size: 14px;
+  padding: 12px;
+  border-radius: 4px;
+  margin-top: 0.5rem;
+}
+
+.wl-modal .form-success {
+  color: var(--tertiary-container);
+  background: rgba(115, 196, 111, 0.1);
+}
+
+.wl-modal .form-error {
+  color: #ff6b6b;
+  background: rgba(255, 107, 107, 0.1);
+}
+
+@media (max-width: 500px) {
+  .wl-modal {
+    padding: 2rem 1.5rem;
+  }
+
+  .wl-modal h3 {
+    font-size: 20px;
+  }
+}
+
+
+/* ══════════════════════════════════════════════════════════════
    Language Switcher
    ══════════════════════════════════════════════════════════════ */
 

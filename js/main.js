@@ -3,7 +3,8 @@
  * ----------------------------------------
  * 1. Smooth scrolling for in-page anchor links
  * 2. FAQ accordion
- * 3. HubSpot waitlist form submission
+ * 3. Waitlist modal (form + HubSpot submission)
+ * 4. Language switcher toggle
  */
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -16,8 +17,8 @@ document.addEventListener('DOMContentLoaded', function () {
     anchor.addEventListener('click', function (e) {
       var targetId = this.getAttribute('href');
 
-      // Ignore bare "#" links
-      if (targetId === '#') return;
+      // Ignore bare "#" links and #waitlist (handled by modal)
+      if (targetId === '#' || targetId === '#waitlist') return;
 
       var target = document.querySelector(targetId);
       if (!target) return;
@@ -64,35 +65,251 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   // =========================================================================
-  // 3. HubSpot Waitlist Form Submission
+  // 3. Waitlist Modal
   // =========================================================================
 
   var HUBSPOT_PORTAL_ID = '245789604';
   var HUBSPOT_FORM_ID  = 'b1a4a7b4-bddf-4c87-b1a3-7af4b9fd9a31';
 
-  var companyInput = document.getElementById('cta-company');
-  var phoneInput   = document.getElementById('cta-phone');
-  var submitBtn    = document.querySelector('.cta-btn');
-  var ctaForm      = companyInput && phoneInput
-    ? companyInput.closest('.cta-form') || companyInput.closest('form')
+  // ── 3a. Create modal DOM ──
+
+  var backdrop = document.createElement('div');
+  backdrop.className = 'wl-modal-backdrop';
+  backdrop.setAttribute('aria-hidden', 'true');
+  backdrop.innerHTML =
+    '<div class="wl-modal" role="dialog" aria-modal="true" aria-label="Join the waitlist">' +
+      '<button class="wl-modal-close" aria-label="Close">&times;</button>' +
+      '<h3>Join the <em>waitlist</em></h3>' +
+      '<p class="wl-modal-sub">We\'re onboarding 10 businesses this month. Leave your details and we\'ll WhatsApp you within 24 hours.</p>' +
+      '<div class="cta-form">' +
+        '<label for="wl-company" class="sr-only">Company name</label>' +
+        '<input type="text" class="cta-input" id="wl-company" placeholder="Company name">' +
+        '<label for="wl-phone" class="sr-only">WhatsApp number</label>' +
+        '<input type="tel" class="cta-input" id="wl-phone" placeholder="WhatsApp number">' +
+        '<button class="cta-btn" id="wl-submit">Join waitlist</button>' +
+      '</div>' +
+      '<div class="cta-fine">No spam. We\'ll WhatsApp you directly. That\'s the whole product.</div>' +
+    '</div>';
+
+  document.body.appendChild(backdrop);
+
+  var modal = backdrop.querySelector('.wl-modal');
+  var closeBtn = backdrop.querySelector('.wl-modal-close');
+  var companyInput = document.getElementById('wl-company');
+  var phoneInput = document.getElementById('wl-phone');
+  var submitBtn = document.getElementById('wl-submit');
+  var previousFocus = null;
+
+  // ── 3b. Open / close helpers ──
+
+  function openModal() {
+    previousFocus = document.activeElement;
+    backdrop.setAttribute('aria-hidden', 'false');
+    backdrop.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+
+    // Trigger transition after display is set
+    requestAnimationFrame(function () {
+      backdrop.classList.add('is-visible');
+    });
+
+    companyInput.focus();
+
+    // Push tracking event
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: 'modal_open',
+      modal_name: 'waitlist'
+    });
+  }
+
+  function closeModal() {
+    backdrop.classList.remove('is-visible');
+    document.body.style.overflow = '';
+
+    // Wait for transition to finish before hiding
+    setTimeout(function () {
+      backdrop.style.display = 'none';
+      backdrop.setAttribute('aria-hidden', 'true');
+    }, 200);
+
+    // Restore focus
+    if (previousFocus) previousFocus.focus();
+
+    // Push tracking event
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: 'modal_close',
+      modal_name: 'waitlist'
+    });
+  }
+
+  // ── 3c. Event listeners for open/close ──
+
+  // Close on X button
+  closeBtn.addEventListener('click', closeModal);
+
+  // Close on backdrop click
+  backdrop.addEventListener('click', function (e) {
+    if (e.target === backdrop) closeModal();
+  });
+
+  // Close on Escape
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && backdrop.classList.contains('is-visible')) {
+      closeModal();
+    }
+  });
+
+  // Focus trap inside modal
+  modal.addEventListener('keydown', function (e) {
+    if (e.key !== 'Tab') return;
+
+    var focusable = modal.querySelectorAll('input, button');
+    var first = focusable[0];
+    var last = focusable[focusable.length - 1];
+
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  });
+
+  // ── 3d. Hook up all CTA buttons to open modal ──
+
+  // On index.html: intercept #waitlist anchor clicks
+  document.querySelectorAll('a[href="#waitlist"]').forEach(function (link) {
+    link.addEventListener('click', function (e) {
+      e.preventDefault();
+      openModal();
+    });
+  });
+
+  // On other pages: intercept links to index.html#waitlist
+  document.querySelectorAll('a[href="index.html#waitlist"]').forEach(function (link) {
+    link.addEventListener('click', function (e) {
+      e.preventDefault();
+      openModal();
+    });
+  });
+
+  // ── 3e. Form submission (HubSpot) ──
+
+  submitBtn.addEventListener('click', function (e) {
+    e.preventDefault();
+
+    var company = companyInput.value.trim();
+    var phone = phoneInput.value.trim();
+
+    if (!company || !phone) {
+      showModalStatus('Please fill in both fields.', 'error');
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending…';
+
+    var endpoint =
+      'https://api-na2.hsforms.com/submissions/v3/integration/submit/' +
+      HUBSPOT_PORTAL_ID + '/' + HUBSPOT_FORM_ID;
+
+    var payload = {
+      fields: [
+        { objectTypeId: '0-2', name: 'name',    value: company },
+        { objectTypeId: '0-1', name: 'phone',   value: phone },
+        { objectTypeId: '0-1', name: 'message',  value: 'PakkaQuote waitlist signup' }
+      ],
+      context: {
+        pageUri:  window.location.href,
+        pageName: document.title
+      }
+    };
+
+    fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+      .then(function (response) {
+        if (!response.ok) {
+          throw new Error('Submission failed (' + response.status + ')');
+        }
+        return response.json();
+      })
+      .then(function () {
+        // Push waitlist_signup to dataLayer
+        var utm = (window.pqTracking && window.pqTracking.utmData) || {};
+        var page = (window.pqTracking && window.pqTracking.pageInfo) || {};
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          event:         'waitlist_signup',
+          signup_source: page.name || document.title,
+          company_name:  company,
+          utm_source:    utm.utm_source   || '(direct)',
+          utm_campaign:  utm.utm_campaign || '(not set)'
+        });
+
+        showModalStatus('Thank you! We\'ll WhatsApp you within 24 hours.', 'success');
+      })
+      .catch(function (err) {
+        console.error('HubSpot form error:', err);
+        showModalStatus('Something went wrong. Please try again.', 'error');
+      })
+      .finally(function () {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Join waitlist';
+      });
+  });
+
+  function showModalStatus(message, type) {
+    // Remove existing status
+    var existing = modal.querySelector('.form-status');
+    if (existing) existing.remove();
+
+    var msg = document.createElement('div');
+    msg.className = 'form-status form-' + type;
+    msg.textContent = message;
+
+    var form = modal.querySelector('.cta-form');
+    form.insertAdjacentElement('afterend', msg);
+
+    if (type === 'success') {
+      // Hide form, show success
+      form.style.display = 'none';
+      var fine = modal.querySelector('.cta-fine');
+      if (fine) fine.style.display = 'none';
+    }
+  }
+
+  // =========================================================================
+  // 3f. Inline form fallback (bottom of index.html)
+  // =========================================================================
+  // The #waitlist section at the bottom still has an inline form.
+  // Wire it up too so it works for users who scroll there naturally.
+
+  var inlineCompany = document.getElementById('cta-company');
+  var inlinePhone = document.getElementById('cta-phone');
+  var inlineBtn = document.querySelector('.cta-section .cta-btn');
+  var inlineForm = inlineCompany && inlinePhone
+    ? inlineCompany.closest('.cta-form') || inlineCompany.closest('form')
     : null;
 
-  // Only wire up if the waitlist form elements exist on this page
-  if (submitBtn && companyInput && phoneInput) {
-    submitBtn.addEventListener('click', function (e) {
+  if (inlineBtn && inlineCompany && inlinePhone) {
+    inlineBtn.addEventListener('click', function (e) {
       e.preventDefault();
 
-      var company = companyInput.value.trim();
-      var phone   = phoneInput.value.trim();
+      var company = inlineCompany.value.trim();
+      var phone = inlinePhone.value.trim();
 
-      // Basic validation
       if (!company || !phone) {
-        showFormError('Please fill in both fields.');
+        showInlineStatus('Please fill in both fields.', 'error');
         return;
       }
 
-      // Disable the submit button while request is in flight
-      submitBtn.disabled = true;
+      inlineBtn.disabled = true;
 
       var endpoint =
         'https://api-na2.hsforms.com/submissions/v3/integration/submit/' +
@@ -100,8 +317,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
       var payload = {
         fields: [
-          { objectTypeId: '0-2', name: 'name',  value: company },
-          { objectTypeId: '0-1', name: 'phone',    value: phone },
+          { objectTypeId: '0-2', name: 'name',    value: company },
+          { objectTypeId: '0-1', name: 'phone',   value: phone },
           { objectTypeId: '0-1', name: 'message',  value: 'PakkaQuote waitlist signup' }
         ],
         context: {
@@ -116,13 +333,10 @@ document.addEventListener('DOMContentLoaded', function () {
         body: JSON.stringify(payload)
       })
         .then(function (response) {
-          if (!response.ok) {
-            throw new Error('Submission failed (' + response.status + ')');
-          }
+          if (!response.ok) throw new Error('Submission failed');
           return response.json();
         })
         .then(function () {
-          // Push waitlist_signup to dataLayer before showing success UI
           var utm = (window.pqTracking && window.pqTracking.utmData) || {};
           var page = (window.pqTracking && window.pqTracking.pageInfo) || {};
           window.dataLayer = window.dataLayer || [];
@@ -134,65 +348,32 @@ document.addEventListener('DOMContentLoaded', function () {
             utm_campaign:  utm.utm_campaign || '(not set)'
           });
 
-          showFormSuccess('Thank you! You have been added to the waitlist.');
+          showInlineStatus('Thank you! You have been added to the waitlist.', 'success');
         })
         .catch(function (err) {
           console.error('HubSpot form error:', err);
-          showFormError('Something went wrong. Please try again.');
+          showInlineStatus('Something went wrong. Please try again.', 'error');
         })
         .finally(function () {
-          submitBtn.disabled = false;
+          inlineBtn.disabled = false;
         });
     });
   }
 
-  // -----------------------------------------------------------------------
-  // Form feedback helpers
-  // -----------------------------------------------------------------------
-
-  /**
-   * Display a success message inside the form, replacing its contents.
-   */
-  function showFormSuccess(message) {
-    if (!ctaForm) return;
-
-    // Remove any previous status message
-    clearFormStatus();
+  function showInlineStatus(message, type) {
+    if (!inlineForm) return;
+    inlineForm.querySelectorAll('.form-status').forEach(function (el) { el.remove(); });
 
     var msg = document.createElement('div');
-    msg.className = 'form-status form-success';
+    msg.className = 'form-status form-' + type;
     msg.textContent = message;
-    ctaForm.appendChild(msg);
+    inlineForm.appendChild(msg);
 
-    // Hide the form fields so the success message stands alone
-    Array.from(ctaForm.children).forEach(function (child) {
-      if (child !== msg) child.style.display = 'none';
-    });
-  }
-
-  /**
-   * Display an error message below the form fields.
-   */
-  function showFormError(message) {
-    if (!ctaForm) return;
-
-    // Remove any previous status message
-    clearFormStatus();
-
-    var msg = document.createElement('div');
-    msg.className = 'form-status form-error';
-    msg.textContent = message;
-    ctaForm.appendChild(msg);
-  }
-
-  /**
-   * Remove existing status messages from the form.
-   */
-  function clearFormStatus() {
-    if (!ctaForm) return;
-    ctaForm.querySelectorAll('.form-status').forEach(function (el) {
-      el.remove();
-    });
+    if (type === 'success') {
+      Array.from(inlineForm.children).forEach(function (child) {
+        if (child !== msg) child.style.display = 'none';
+      });
+    }
   }
 
   // =========================================================================
